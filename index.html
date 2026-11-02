@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Юля, погуляем?</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@300;400;600&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+  :root{--bone:#fff3ee;--dim:#cdb4c4;--pink:#ff5fae;--soft:#ffc2dd;--amber:#ffb454;--serif:'Playfair Display',Georgia,serif;
+    box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  *,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
+  html{height:100%}
+  body{min-height:100%;background:#120a1f;color:var(--bone);font-family:'Manrope',system-ui,sans-serif;font-weight:300;overflow-x:hidden}
+  .sky,.night,.stars,.sun,.sk{position:fixed;left:0;right:0;pointer-events:none}
+  .sky{inset:0;z-index:0;background:linear-gradient(180deg,#120a1f 0%,#2a1245 34%,#7a2a6b 62%,#e0527f 82%,#ffa066 100%)}
+  .night{inset:0;z-index:1;background:linear-gradient(180deg,#07040d 0%,#170a2b 55%,#3a1450 100%);opacity:0;transition:opacity 2.4s ease}
+  body.dusk .night{opacity:.78}
+  .stars{inset:0;z-index:1}
+  .stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.2;animation:tw 4s ease-in-out infinite alternate}
+  @keyframes tw{to{opacity:.95}}
+  .sun{left:50%;bottom:20vh;width:min(46vw,200px);aspect-ratio:1;margin-left:calc(min(46vw,200px) / -2);z-index:2;border-radius:50%;background:radial-gradient(circle,#fff1c9 0 38%,#ffb454 52%,rgba(255,120,120,0) 72%);filter:blur(1px);transition:transform 2.4s ease,opacity 2.4s;pointer-events:auto;cursor:pointer;animation:glow 5s ease-in-out infinite alternate}
+  @keyframes glow{to{filter:blur(2px) brightness(1.12)}}
+  body.dusk .sun{transform:translateY(110px);opacity:.5}
+  .sk{bottom:0;width:100%;height:38vh;min-height:200px}
+  .sk.b{z-index:3;transition:transform .3s ease-out}.sk.f{z-index:4;transition:transform .3s ease-out}
+  .wd{opacity:.2;animation:tw 5s ease-in-out infinite alternate}
+  .screen{position:relative;z-index:10;min-height:100vh;display:flex;align-items:flex-start;padding:min(14vh,110px) 22px 260px}
+  .screen[hidden]{display:none}
+  .box{width:100%;max-width:700px;margin:0 auto;text-align:center}
+  .eyebrow{font-size:14px;letter-spacing:.22em;color:var(--soft);animation:rise .9s .1s both}
+  h1{margin-top:14px;font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(40px,11vw,92px);line-height:1;letter-spacing:-.04em;background:linear-gradient(100deg,#fff 0%,#ffd9ec 35%,#ff7fbe 70%,#ffb454 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .9s .25s both,shine 8s ease-in-out infinite alternate;padding-bottom:.08em}
+  @keyframes shine{to{background-position:100% 0}}
+  .lead{margin:22px auto 34px;font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(20px,4.6vw,28px);color:var(--bone);animation:rise .9s .4s both}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}}
+  .days{display:grid;grid-template-columns:1fr 1fr;gap:16px;animation:rise .9s .55s both}
+  .day{position:relative;text-align:left;padding:24px 22px 22px;border-radius:26px;cursor:pointer;color:var(--bone);font:inherit;background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 50px rgba(0,0,0,.35);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s,border-color .35s;overflow:hidden}
+  .day::after{content:'';position:absolute;inset:auto -30% -60% -30%;height:80%;background:radial-gradient(closest-side,var(--g),transparent);opacity:.55;transition:opacity .35s}
+  .day.w{--g:rgba(255,180,84,.7)}.day.f{--g:rgba(255,95,174,.7)}
+  .day:hover,.day:focus-visible{transform:translateY(-6px);border-color:rgba(255,255,255,.55);box-shadow:0 26px 60px rgba(0,0,0,.45)}
+  .day:hover::after{opacity:.9}.day:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
+  .day svg{width:34px;height:34px;display:block;margin-bottom:26px;position:relative;z-index:1}
+  .day b{position:relative;z-index:1;display:block;font:700 clamp(20px,5vw,28px) 'Unbounded',sans-serif;letter-spacing:-.02em}
+  .day span{position:relative;z-index:1;display:block;margin-top:8px;font-size:14px;line-height:1.45;color:var(--dim)}
+  .no{margin-top:26px;font:400 13px 'Manrope',sans-serif;padding:12px 22px;border-radius:30px;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.18);color:var(--dim);cursor:pointer;animation:rise .9s .7s both}
+  .no.run{position:fixed;z-index:200;transition:left .3s,top .3s;animation:none}
+  .ticket{position:relative;display:grid;grid-template-columns:1fr 128px;text-align:left;border-radius:26px;background:linear-gradient(150deg,#fff3ee,#ffd9ec);color:#2a1038;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:pop .8s cubic-bezier(.16,1,.3,1);-webkit-mask:radial-gradient(14px at calc(100% - 128px) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(14px at calc(100% - 128px) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;mask:radial-gradient(14px at calc(100% - 128px) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(14px at calc(100% - 128px) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+  @keyframes pop{from{opacity:0;transform:translateY(30px) scale(.94) rotate(-2deg)}}
+  .t-main{padding:34px 28px}
+  .t-main small{font-size:13px;letter-spacing:.16em;color:#a02a73}
+  .t-main h2{margin:10px 0 12px;font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(44px,12vw,72px);line-height:1;letter-spacing:-.02em}
+  .t-main p{font-size:16px;line-height:1.6;color:#5a3a66;max-width:30ch}
+  .t-main p strong{color:#2a1038;font-weight:600}
+  .t-stub{border-left:2px dashed rgba(42,16,56,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center;font:700 12px 'Unbounded',sans-serif;color:#a02a73}
+  .t-stub{text-decoration:none;cursor:pointer;transition:background .3s}
+  .t-stub:hover,.t-stub:focus-visible{background:rgba(255,95,174,.16)}
+  .t-stub:focus-visible{outline:2px solid #a02a73;outline-offset:-4px}
+  .t-stub svg{width:38px;height:38px;animation:nudge 2.4s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-4px) rotate(-6deg)}}
+  .ps{margin-top:22px;font-size:15px;color:var(--bone)}
+  .player{margin:26px auto 0;width:min(100%,614px)}
+  .player:empty{display:none}
+  .player iframe{display:block;width:100%;border:0;border-radius:18px;background:rgba(0,0,0,.25)}
+  .back{display:inline-block;margin-top:18px;background:none;border:0;color:var(--dim);font:400 13px 'Manrope',sans-serif;text-decoration:underline;cursor:pointer}
+  .petal{position:fixed;top:-30px;z-index:50;pointer-events:none;border-radius:150% 0 150% 0;animation:fall linear forwards}
+  @keyframes fall{to{transform:translate(var(--dx),115vh) rotate(var(--r))}}
+  .toast{position:fixed;left:50%;top:calc(18px + env(safe-area-inset-top,0px));transform:translate(-50%,-20px);background:rgba(255,243,238,.95);color:#2a1038;font:700 13px 'Unbounded',sans-serif;padding:13px 22px;border-radius:30px;opacity:0;transition:.35s;z-index:300;max-width:90vw;text-align:center;pointer-events:none}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:560px){.days{gap:12px}.day{padding:20px 16px}.ticket{grid-template-columns:1fr 92px;-webkit-mask:none;mask:none}.t-main{padding:28px 20px}.t-stub{font-size:11px;padding:10px}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.stars i,.wd{opacity:.6}}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="night"></div><div class="stars" id="stars"></div>
+<div class="sun" id="sun" title="Закат"></div>
+<svg class="sk b" id="back" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+<svg class="sk f" id="front" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+
+<section class="screen" id="s1">
+  <div class="box">
+    <p class="eyebrow">среда · пятница</p>
+    <h1>Юля, <br>погуляем?</h1>
+    <p class="lead">Выбирай день, время подстроим.</p>
+    <div class="days">
+      <button class="day w" data-day="среда">
+        <svg viewBox="0 0 34 34" fill="none" stroke="#ffd9a0" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="17" cy="17" r="6" fill="#ffb454" stroke="none"/><path d="M17 3v4M17 27v4M3 17h4M27 17h4M7 7l3 3M24 24l3 3M27 7l-3 3M10 24l-3 3"/></svg>
+        <b>Среда</b><span>Середина недели, как раз пора выдохнуть</span>
+      </button>
+      <button class="day f" data-day="пятница">
+        <svg viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M24 22A11 11 0 0 1 12 6a11 11 0 1 0 12 16z" fill="#ffc2dd"/><path d="M27 6l1 3 3 1-3 1-1 3-1-3-3-1 3-1z" fill="#fff"/></svg>
+        <b>Пятница</b><span>Конец недели, можно не спешить</span>
+      </button>
+    </div>
+    <button class="no" id="no">Ни то ни другое</button>
+  </div>
+</section>
+
+<section class="screen" id="s2" hidden>
+  <div class="box">
+    <div class="ticket">
+      <div class="t-main">
+        <small>Прогулка на двоих</small>
+        <h2 id="day"></h2>
+        <p>Время выберешь ты, мне подходит <strong>любое</strong>.</p>
+      </div>
+      <a class="t-stub" href="https://t.me/Russianoperator" target="_blank" rel="noopener" aria-label="Написать в Telegram, во сколько">
+        <svg viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M5 9h24v15H15l-7 6v-6H5z" fill="#ff5fae"/><path d="M11 15h12M11 19h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Напиши, во сколько
+      </a>
+    </div>
+    <!-- ===== СЮДА ВСТАВЬ ПЛЕЕР С ТРЕКАМИ: замени пустое место между тегами на код <iframe ...> из Яндекс Музыки ===== -->
+    <div class="player"><iframe frameborder="0" allow="clipboard-write" style="border:none;width:614px;height:556px;" width="614" height="556" src="https://music.yandex.ru/iframe/playlist/nphne-rfhscpki/1001">Слушайте <a href="https://music.yandex.ru/playlists/714bf2d9-7b6f-422e-a7bd-9aa9944c308f?utm_source=desktop&utm_medium=copy_link">How you Baby?</a> — <a href="https://music.yandex.ru/users/nphne-rfhscpki">Камиль</a> на Яндекс Музыке</iframe></div>
+    <p class="ps">P.S. Кофе за мной ☕</p>
+    <button class="back" id="again">Выбрать другой день</button>
+  </div>
+</section>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let tt;
+  function say(m, ms){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), ms || 2400); }
+
+  // sky and city
+  $('stars').innerHTML = Array.from({length: 70}, () => '<i style="left:' + (Math.random()*100).toFixed(1) + '%;top:' + (Math.random()*55).toFixed(1) + '%;animation-delay:-' + (Math.random()*4).toFixed(1) + 's;transform:scale(' + (0.6 + Math.random()*1.4).toFixed(1) + ')"></i>').join('');
+  function city(minH, maxH, fill, lit){
+    let x = -20, out = '';
+    while (x < 1460){
+      const w = 24 + Math.random()*50, h = minH + Math.random()*(maxH - minH);
+      out += '<rect x="' + x.toFixed(0) + '" y="' + (300 - h).toFixed(0) + '" width="' + w.toFixed(0) + '" height="' + h.toFixed(0) + '" fill="' + fill + '"/>';
+      if (lit) for (let wy = 300 - h + 10; wy < 288; wy += 14) for (let wx = x + 6; wx < x + w - 8; wx += 11) if (Math.random() < .22) out += '<rect class="wd" x="' + wx.toFixed(0) + '" y="' + wy.toFixed(0) + '" width="4" height="6" fill="#ffd9a0" style="animation-delay:-' + (Math.random()*5).toFixed(1) + 's"/>';
+      x += w + Math.random()*6;
+    }
+    return out;
+  }
+  $('back').innerHTML = city(70, 190, '#4a1b55', false);
+  $('front').innerHTML = city(40, 140, '#0f0714', true);
+  if (!calm) addEventListener('pointermove', e => {
+    const dx = (e.clientX / innerWidth - .5) * 2;
+    $('back').style.transform = 'translateX(' + (dx * -8).toFixed(1) + 'px)';
+    $('front').style.transform = 'translateX(' + (dx * -18).toFixed(1) + 'px)';
+  });
+
+  // petals
+  function petals(n){
+    if (calm) return;
+    const cols = ['#ff5fae', '#ffc2dd', '#ffb454', '#fff3ee'];
+    for (let i = 0; i < n; i++) setTimeout(() => {
+      const p = document.createElement('div'), s = 10 + Math.random()*14;
+      p.className = 'petal'; p.style.width = p.style.height = s + 'px'; p.style.left = Math.random()*100 + 'vw';
+      p.style.background = cols[Math.floor(Math.random()*cols.length)]; p.style.opacity = .55 + Math.random()*.4;
+      p.style.setProperty('--dx', (Math.random()*160 - 80) + 'px'); p.style.setProperty('--r', (Math.random()*900 - 450) + 'deg');
+      p.style.animationDuration = (5 + Math.random()*5) + 's';
+      document.body.appendChild(p); setTimeout(() => p.remove(), 10500);
+    }, i * 90);
+  }
+
+  // choose day
+  document.querySelectorAll('[data-day]').forEach(b => b.addEventListener('click', () => {
+    $('day').textContent = b.dataset.day; $('s1').hidden = true; $('s2').hidden = false; scrollTo(0,0);
+    document.body.classList.add('dusk'); petals(60);
+  }));
+  $('again').addEventListener('click', () => { $('s2').hidden = true; $('s1').hidden = false; document.body.classList.remove('dusk'); scrollTo(0,0); });
+
+  // dodging button
+  const no = $('no'), lines = ['Ни то ни другое','Точно?','Подумай','Юля…','Ладно, выбирай день'];
+  let n = 0;
+  function dodge(){
+    if (n >= 4){ no.style.opacity = '0'; no.style.pointerEvents = 'none'; say('Кнопка закончилась 😌'); return; }
+    const r = no.getBoundingClientRect(); no.classList.add('run');
+    no.style.left = Math.max(15, Math.random()*(innerWidth - r.width - 30)) + 'px';
+    no.style.top = Math.max(15, Math.random()*(innerHeight - r.height - 30)) + 'px';
+    no.textContent = lines[++n];
+  }
+  no.addEventListener('mouseenter', dodge);
+  no.addEventListener('focus', dodge);
+  no.addEventListener('touchstart', e => { e.preventDefault(); dodge(); }, { passive:false });
+
+  // easter eggs
+  const sunLines = ['Закат идёт тебе 🌇', 'Солнце тоже согласно', 'Ещё немного, и зажгутся окна'];
+  let sc = 0;
+  $('sun').addEventListener('click', () => { say(sunLines[sc++ % sunLines.length]); petals(14); });
+  let kb = '';
+  addEventListener('keydown', e => { kb = (kb + e.key.toLowerCase()).slice(-4); if (kb === 'юля' || kb.endsWith('юля')) { say('Это же ты 🌸'); petals(24); kb = ''; } });
+  document.addEventListener('visibilitychange', () => { document.title = document.hidden ? 'Юля, вернись ☕' : 'Юля, погуляем?'; });
+</script>
+</body>
+</html>

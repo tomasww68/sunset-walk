@@ -16,6 +16,12 @@
   .pn{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,520px);max-height:54vh;overflow:auto;padding:22px 20px;border-radius:26px;background:linear-gradient(160deg,rgba(24,10,40,.8),rgba(24,10,40,.52));border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);text-align:center;z-index:10;animation:pin .55s cubic-bezier(.16,1,.3,1);touch-action:pan-y}
   @keyframes pin{from{opacity:0;transform:translate(-50%,18px) scale(.96)}}
   [hidden]{display:none!important}
+  #hud #nt{position:fixed;right:16px;bottom:calc(28px + env(safe-area-inset-bottom,0px));width:76px;height:76px;margin:0;padding:0;font-size:32px;border-radius:50%;border:3px solid rgba(255,255,255,.35);background:conic-gradient(#ff8a3c var(--p,0%),rgba(0,0,0,.45) 0);opacity:.55;pointer-events:auto;touch-action:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  #hud #nt.rdy{opacity:1;box-shadow:0 0 26px #ff8a3c}
+  #cm{position:fixed;left:50%;top:24%;transform:translateX(-50%);z-index:15;pointer-events:none;font:900 28px Unbounded,sans-serif;color:#ffe3f1;text-shadow:0 2px 14px #ff5fae,0 0 4px #000;opacity:0;white-space:nowrap}
+  @keyframes cmp{from{transform:translate(-50%,0) scale(1.4);opacity:1}to{transform:translate(-50%,-30px) scale(1);opacity:0}}
+  #bb{position:fixed;left:0;top:0;z-index:20;pointer-events:none;background:#fff3ee;color:#2a1038;font:600 13px/1.25 Unbounded,sans-serif;padding:11px 16px;border-radius:18px;border:2px solid #ff5fae;box-shadow:0 6px 24px rgba(0,0,0,.35);white-space:nowrap}
+  #bb:after{content:'';position:absolute;left:50%;bottom:-9px;width:14px;height:14px;background:#fff3ee;border:solid #ff5fae;border-width:0 2px 2px 0;transform:translateX(-50%) rotate(45deg)}
   #over,#pz{top:max(14px,env(safe-area-inset-top));bottom:auto}
   #vg{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at 50% 45%,transparent 58%,rgba(8,0,20,.5))}
   #fl{position:fixed;inset:0;pointer-events:none;z-index:6;opacity:0;transition:opacity .45s}
@@ -41,7 +47,7 @@
   #hud span,#hud button{padding:9px 14px;border-radius:20px;background:rgba(0,0,0,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   #hud button{margin-left:auto;border:0;font:600 13px Manrope,sans-serif;pointer-events:auto}
   .pop{animation:hp .35s}
-  @keyframes hp{50%{transform:scale(1.35);background:var(--pink)}}
+  @keyframes hp{50%{transform:scale(1.12)}}
   .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:rgba(255,243,238,.96);color:#2a1038;font:600 13px Unbounded,sans-serif;padding:13px 22px;border-radius:30px;opacity:0;transition:.35s;z-index:300;max-width:90vw;text-align:center;pointer-events:none}
   .toast.on{opacity:1;transform:translate(-50%,0)}
   .player{margin-top:12px}.player:empty{display:none}.player iframe{width:100%;border:0;border-radius:16px}
@@ -49,17 +55,17 @@
 </head>
 <body>
 <canvas id="c"></canvas><div id="vg"></div><div id="fl"></div>
-<div id="hud" hidden><span id="hdist">0 м</span><span id="hhr">♥ 0</span><button id="hm">Пауза</button></div>
+<div id="hud" hidden><span id="hdist">0 м</span><span id="hhr">♥ 0</span><button id="hm">Пауза</button><button id="nt">🔥</button></div>
 
 <div class="pn" id="menu">
   <div id="home">
     <h1>for baby</h1>
     <p class="sub">Казань, Darex 250 и ты за рулём. Свайп влево и вправо, тап или свайп вверх, чтобы прыгнуть.</p>
-    <div class="row"><button class="b" id="bPlay">Поехали</button><button class="b g" id="bGar">Гараж</button><button class="b g" id="bMis">Задания</button></div>
+    <div class="row"><button class="b" id="bPlay">Поехали</button><button class="b g" id="bGar">Гараж</button><button class="b g" id="bMis">Задания</button><button class="b g" id="bSn">🔊</button></div>
     <p class="lb">Карта</p><div class="row" id="mp"></div>
     <p class="lb">Условия</p><div class="row" id="wx"></div>
     <!-- ===== СЮДА ВСТАВЬ ПЛЕЕР С ТРЕКАМИ: код <iframe> из Яндекс Музыки вместо следующей пометки ===== -->
-    <div class="player"><iframe frameborder="0" allow="clipboard-write" style="border:none;width:614px;height:556px;" width="614" height="556" src="https://music.yandex.ru/iframe/playlist/nphne-rfhscpki/1001">Слушайте <a href="https://music.yandex.ru/playlists/714bf2d9-7b6f-422e-a7bd-9aa9944c308f?utm_source=desktop&utm_medium=copy_link">How you Baby?</a> — <a href="https://music.yandex.ru/users/nphne-rfhscpki">Камиль</a> на Яндекс Музыке</iframe></div>
+    <div class="player"><!-- ВСТАВЬ <iframe> ЗДЕСЬ --></div>
   </div>
   <div id="gar" hidden>
     <h1 style="font-size:34px">Гараж</h1>
@@ -83,6 +89,8 @@
   <div class="row"><button class="b" id="bAgain">Ещё раз</button><button class="b g" id="bMenu">Меню</button></div>
 </div>
 <div class="pn" id="pz" hidden><h1 style="font-size:36px">Пауза</h1><div class="row"><button class="b" id="bRes">Продолжить</button><button class="b g" id="bMn2">Меню</button></div></div>
+<div id="cm"></div>
+<div id="bb" hidden>Тут даже я офигел</div>
 <div class="toast" id="toast" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -92,7 +100,7 @@
   let mode = 'menu';
   const LS = { get(k, d){ try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
   const S = Object.assign({ map:'kazan', wx:'day', bike:'darex', body:'#2f6bff', helmet:'#111118', horns:'#ff5fae', hoodie:'#15151b' }, LS.get('fb', {}));
-  const P = Object.assign({ kd:0, hr:0, rd:0, best:0, seen:0 }, LS.get('fbp', {}));
+  const P = Object.assign({ kd:0, hr:0, rd:0, best:0, seen:0, bear:0 }, LS.get('fbp', {}));
   const unl = () => P.kd >= 1000 && P.hr >= 30 && P.rd >= 600;
   if (S.bike === 'bmw' && !unl()) S.bike = 'darex';
   let tt; function say(m, ms){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), ms || 2600); }
@@ -134,7 +142,7 @@
     return [new THREE.CanvasTexture(a), new THREE.CanvasTexture(e)];
   }
   const [tA, tE] = texes();
-  mat.bld = [0xc9d2e6, 0xd8c8c0, 0xb7c4cc].map(c => M(c, { map: tA, emissive: 0xffffff, emissiveMap: tE, emissiveIntensity: 0 }));
+  mat.lf = [mat.leaf, mat.leaf, M(0x4a8a3a), M(0xc58a2a), M(0xb5482e)]; mat.snow = M(0xf4f8ff, { roughness: 1 }); mat.nz = [0xff2fb4, 0x2fd4ff, 0xb44dff, 0xffd02f].map(c => M(c, { emissive: c, emissiveIntensity: 1.7 })); mat.mag = M(0xe4002b, { emissive: 0x660011 }); mat.bld = [0xc9d2e6, 0xd8c8c0, 0xb7c4cc].map(c => M(c, { map: tA, emissive: 0xffffff, emissiveMap: tE, emissiveIntensity: 0 }));
   function limb(a, b, r, m){ const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), d = B.clone().sub(A), l = d.length(), o = cyl(r, r, +l.toFixed(3), m, 8); o.position.copy(A).add(B).multiplyScalar(.5); o.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); return o; }
 
   // ---------- weather and world ----------
@@ -156,7 +164,7 @@
   for (let i = 0; i < 9; i++){ const c = new THREE.Group(); for (let j = 0; j < 4; j++){ const q = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 6), cM); q.scale.set(5 + Math.random() * 4, 2 + Math.random(), 3); q.position.set(j * 5 - 8, Math.random() * 1.5, Math.random() * 3); c.add(q); } c.position.set((i - 4) * 55, 35 + Math.random() * 25, -150 - Math.random() * 80); clouds.add(c); }
   scene.add(clouds);
   function applyWx(){
-    const c = WXC[S.wx], n = S.wx === 'night', d = S.wx === 'dusk', r = S.wx === 'rain'; scene.background = new THREE.Color(c.bg); scene.fog = new THREE.Fog(c.bg, c.fn, c.ff);
+    const c = WXC[S.wx], n = S.wx === 'night', d = S.wx === 'dusk', r = S.wx === 'rain'; scene.background = new THREE.Color(c.bg); scene.fog = new THREE.Fog(c.bg, S.map === 'forest' ? c.fn * .55 : c.fn, S.map === 'forest' ? c.ff * .7 : c.ff);
     skyU.t.value.set(c.st); skyU.b.value.set(c.bg);
     hemi.color.set(c.hc); hemi.groundColor.set(c.hs); hemi.intensity = c.hi; sun.intensity = c.di; sun.color.set(n ? 0x8899ff : d ? 0xff9a55 : 0xffffff); head.intensity = c.ni * 2.4;
     sunO.set(d ? -16 : -8, d ? 7 : 15, d ? 9 : 6);
@@ -167,6 +175,12 @@
   const plane = (w, l, m, x0, y0) => { const p = new THREE.Mesh(new THREE.PlaneGeometry(w, l), m); p.rotation.x = -Math.PI / 2; p.position.set(x0, y0, -140); p.receiveShadow = true; scene.add(p); return p; };
   plane(9.4, 340, mat.road, 0, 0); const gr = plane(80, 340, mat.side, 44, -.02), gl = plane(80, 340, mat.side, -44, -.02), pav = plane(1.6, 340, mat.pav, -5.5, .01), water = plane(90, 340, mat.water, -50, -.9);
   [-4.6, 4.6].forEach(x0 => { const e = box(.14, .02, 340, mat.dash); e.position.set(x0, .015, -140); scene.add(e); });
+  let CM = 'kazan';
+  const GC = { kazan:[0x7c8f6a, 0x2d2d36], forest:[0x4c7a45, 0x2d2d36], river:[0x7c8f6a, 0x2d2d36], mountain:[0x7a6f66, 0x34343c], neon:[0x1a1530, 0x1d1b2e], winter:[0xe8f0f8, 0x8d96a2] }, gtc = new THREE.Color(), rtc = new THREE.Color(),
+    TOUR = ['kazan', 'forest', 'mountain', 'winter', 'neon'], TN = { kazan:'🕌 Казань', forest:'🌲 Лес', mountain:'⛰️ Серпантин', winter:'❄️ Зима', neon:'🌃 Неон' };
+  function setGround(m, now){ gtc.set(GC[m][0]); rtc.set(GC[m][1]); if (now){ mat.side.color.copy(gtc); mat.road.color.copy(rtc); } }
+  const snG = new THREE.BufferGeometry(), snp = new Float32Array(260 * 3); for (let i = 0; i < 260; i++) snp.set([(Math.random() - .5) * 26, Math.random() * 12, -30 + Math.random() * 38], i * 3);
+  snG.setAttribute('position', new THREE.BufferAttribute(snp, 3)); const snow = new THREE.Points(snG, new THREE.PointsMaterial({ color: 0xffffff, size: 3, sizeAttenuation: false, fog: false })); snow.frustumCulled = false; snow.visible = false; scene.add(snow);
   const CH = 9, L = 30, chunks = Array.from({ length: CH }, () => { const g = new THREE.Group(); scene.add(g); return g; }); let cn = 0;
   const rockM = (s, m) => { const r = new THREE.Mesh(geo('i' + s, () => new THREE.IcosahedronGeometry(s, 0)), m || mat.rock); r.scale.set(1.2, .9, 1); return r; };
   function soy(){ const g = new THREE.Group(); let y = 0; [[3,4],[2.5,3.6],[2,3.2],[1.5,2.8]].forEach(([w, h]) => { const b = box(w, h, w, mat.wall); b.position.y = y + h / 2; g.add(b); y += h; }); const c = cone(1.3, 4, mat.teal, 8); c.position.y = y + 2; g.add(c); g.rotation.z = .05; return g; }
@@ -177,9 +191,31 @@
     const n = ++cn, A = (m, x0, y0, z0) => { m.position.set(x0, y0, z0); ch.add(m); return m; }, rz = () => (Math.random() - .5) * L, bl = (w, hh, d) => box(w, hh, d, mat.bld[Math.floor(Math.random() * 3)]);
     for (const sx of [-1, 1]) for (let i = 0; i < 3; i++) A(box(.14, .02, 2.4, mat.dash), sx * 1.2, .015, -i * 10 + 8);
     const lamp = sx => { A(cyl(.07, .09, 5, mat.pole, 6), sx * 5.4, 2.5, -8); A(box(1, .1, .15, mat.pole), sx * 4.9, 5, -8); A(box(.5, .12, .3, mat.lamp), sx * 4.4, 4.92, -8); };
-    if (S.map === 'forest'){
-      for (const sx of [-1, 1]){ for (let i = 0; i < 7; i++){ const t = new THREE.Group(), tr = cyl(.25, .35, 1.6, mat.wood, 6); tr.position.y = .8; t.add(tr); [[2.2, 2.4], [1.7, 3.6], [1.2, 4.6]].forEach(([r, y0]) => { const c = cone(r, 2, mat.leaf, 7); c.position.y = y0; t.add(c); }); t.scale.setScalar(.8 + Math.random() * .9); A(t, sx * (6.5 + Math.random() * 24), 0, rz()); } if (Math.random() < .5) A(rockM(.8), sx * (6 + Math.random() * 8), .3, rz()); }
-    } else if (S.map === 'kazan'){
+    if (CM === 'forest'){
+      for (const sx of [-1, 1]){ for (let i = 0; i < 7; i++){ const t = new THREE.Group(), tr = cyl(.25, .35, 1.6, mat.wood, 6); tr.position.y = .8; t.add(tr); const lm = mat.lf[Math.floor(Math.random() * 5)]; [[2.2, 2.4], [1.7, 3.6], [1.2, 4.6]].forEach(([r, y0]) => { const c = cone(r, 2, lm, 7); c.position.y = y0; t.add(c); }); t.scale.setScalar(.8 + Math.random() * .9); A(t, sx * (6.5 + Math.random() * 24), 0, rz()); } if (Math.random() < .5) A(rockM(.8), sx * (6 + Math.random() * 8), .3, rz()); }
+    } else if (CM === 'winter'){
+      lamp(-1); lamp(1);
+      for (const sx of [-1, 1]){
+        for (let i = 0; i < 6; i++){ const t = new THREE.Group(), tr = cyl(.25, .35, 1.4, mat.wood, 6); tr.position.y = .7; t.add(tr); [[2.2, 2.2, 0], [1.7, 3.4, 1], [1.2, 4.4, 1]].forEach(([r, y0, w]) => { const c = cone(r, 2, w ? mat.snow : mat.leaf, 7); c.position.y = y0; t.add(c); }); t.scale.setScalar(.8 + Math.floor(Math.random() * 4) * .2); A(t, sx * (6.5 + Math.random() * 22), 0, rz()); }
+        for (let i = 0; i < 3; i++){ const d = sph(1.6, mat.snow); d.scale.set(1.6, .45, 1); A(d, sx * (6 + Math.random() * 3), .1, rz()); }
+      }
+    } else if (CM === 'mountain'){
+      if (n % 6 === 3){
+        A(box(10.6, .7, L, mat.rock), 0, 6.4, 0).castShadow = true; [-1, 1].forEach(sx => A(box(.7, 6.4, L, mat.rock), sx * 5.35, 3.2, 0));
+        for (let i = 0; i < 5; i++) A(box(.5, .1, .5, mat.lamp), 0, 6, -L / 2 + i * 6 + 2);
+      } else {
+        A(box(.12, .1, L, mat.steel), 5.3, .95, 0); for (let i = 0; i < 10; i++) A(box(.1, .95, .1, mat.steel), 5.3, .48, -L / 2 + i * 3 + 1);
+        for (let i = 0; i < 3; i++){ const r = rockM(4 + Math.floor(Math.random() * 3)); r.scale.set(1.4, 1.5 + Math.floor(Math.random() * 3) * .5, 1.2); A(r, -(8.5 + Math.random() * 6), 3, rz()); }
+      }
+      for (const sx of [-1, 1]){ const R0 = 14 + Math.floor(Math.random() * 8), H = 30 + Math.floor(Math.random() * 20), g = new THREE.Group(), m = cone(R0, H, mat.rock, 6), cp = cone(R0 * .35, H * .35, mat.snow, 6); m.position.y = H / 2; cp.position.y = H * .825; g.add(m, cp); A(g, sx * (40 + Math.random() * 25), 0, rz()); }
+    } else if (CM === 'neon'){
+      lamp(-1); lamp(1); const nz = () => mat.nz[Math.floor(Math.random() * 4)];
+      for (const sx of [-1, 1]){
+        A(box(.14, .03, L, nz()), sx * 4.3, .03, 0);
+        for (let i = 0; i < 2; i++){ const h0 = 12 + Math.floor(Math.random() * 16), x0 = sx * (11 + Math.floor(Math.random() * 3)), z0 = -8 + i * 16; A(bl(7, h0, 8), x0, h0 / 2, z0); A(box(.3, h0 * .7, .3, nz()), x0 - sx * 3.7, h0 * .4, z0 + 2.5); A(box(.3, h0 * .7, .3, nz()), x0 - sx * 3.7, h0 * .4, z0 - 2.5); A(box(.2, 1.4, 4.2, nz()), x0 - sx * 3.7, h0 * .85, z0); }
+      }
+      if (n % 4 === 1){ [-1, 1].forEach(sx => A(box(.3, 7.4, .3, mat.pole), sx * 5.6, 3.7, 0)); A(box(11.5, .45, .45, nz()), 0, 7.4, 0); }
+    } else if (CM === 'kazan'){
       lamp(-1); lamp(1); A(box(1.4, 4, L, mat.wall), 9.5, 2, 0); for (let i = 0; i < 15; i++) A(box(1.4, .8, 1, mat.wall), 9.5, 4.4, -L / 2 + i * 2 + 1);
       if (n % 2){ A(cyl(1.6, 1.8, 8, mat.wall, 10), 9.5, 4, 0); A(cone(2, 2.4, mat.teal, 10), 9.5, 9.2, 0); }
       if (n % 7 === 2) A(soy(), 15, 0, 0); if (n % 7 === 5) A(kul(), -24, 0, 0); if (n % 9 === 4) A(kazan(), -26, 0, 0);
@@ -191,7 +227,7 @@
       for (let i = 0; i < 2; i++){ const h0 = 10 + Math.random() * 12; A(bl(7, h0, 8), 13 + Math.random() * 8, h0 / 2, -8 + i * 16); }
     }
   }
-  function buildWorld(){ mat.side.color.set(S.map === 'forest' ? 0x4c7a45 : 0x7c8f6a); gl.visible = S.map !== 'river'; pav.visible = water.visible = S.map === 'river'; chunks.forEach((c, i) => { c.position.z = 40 - i * L; fillChunk(c); }); applyWx(); }
+  function buildWorld(){ CM = S.map === 'tour' ? 'kazan' : S.map; setGround(CM, 1); snow.visible = CM === 'winter'; gl.visible = S.map !== 'river'; pav.visible = water.visible = S.map === 'river'; chunks.forEach((c, i) => { c.position.z = 40 - i * L; fillChunk(c); }); applyWx(); }
 
   // ---------- bike and rider ----------
   function wheel(r, sp){
@@ -242,7 +278,7 @@
   const hs0 = new THREE.Shape(); hs0.moveTo(0, -.5); hs0.bezierCurveTo(-.9, .1, -.5, .75, 0, .3); hs0.bezierCurveTo(.5, .75, .9, .1, 0, -.5);
   const hGeo = new THREE.ExtrudeGeometry(hs0, { depth: .15, bevelEnabled: true, bevelSize: .05, bevelThickness: .05, bevelSegments: 1 }); hGeo.center(); hGeo.scale(.5, .5, .5);
   function obMesh(k){
-    const g = new THREE.Group(), f = S.map === 'forest'; let h, w;
+    const g = new THREE.Group(), f = CM === 'forest' || CM === 'winter'; let h, w;
     if (k === 0){ const c = cone(.36, .8, mat.orange, 10); c.position.y = .4; g.add(c); const b = box(.8, .05, .8, mat.orange); b.position.y = .03; g.add(b); const s = cyl(.2, .26, .1, mat.white, 10); s.position.y = .38; g.add(s); h = .8; w = .8; }
     else if (k === 1){ if (f){ const l = cyl(.45, .45, 2, mat.wood, 10); l.rotation.z = Math.PI / 2; l.position.y = .45; g.add(l); h = .9; } else { const b = box(2, 1, .5, mat.gray); b.position.y = .5; g.add(b); const s = box(2.02, .15, .52, mat.redm); s.position.y = .7; g.add(s); h = 1; } w = 2; }
     else { const r = rockM(.6); r.position.y = .45; g.add(r); h = .8; w = 1.3; }
@@ -256,7 +292,7 @@
   // ---------- state ----------
   const lx = [-2.4, 0, 2.4]; let lane = 1, dist = 0, hearts = 0, speed = 15, py = 0, vy = 0, air = false, jumpReq = false, obs = [], hl = [], nextSp = 0, tm = 0, ec = 0, wt = 0, shake = 0, eg = {}, hudT = 0, tum = null, bx = 0, leanK = 0, puffT = 0, sp = 3, ov = 0;
   const rr = () => Math.random();
-  function clearItems(){ obs.forEach(o => scene.remove(o.g)); hl.forEach(a => scene.remove(a.m)); obs = []; hl = []; }
+  function clearItems(){ obs.forEach(o => scene.remove(o.g)); hl.forEach(a => scene.remove(a.m)); obs = []; hl = []; if (bearE){ scene.remove(bearE.g); bearE = null; } bearDone = 0; pk.forEach(p => scene.remove(p.g)); pk = []; $('bb').hidden = true; }
   function resetBike(){ const r = bike.root; scene.add(r); r.position.set(0, 0, 0); r.rotation.set(0, 0, 0); bike.lean.rotation.set(0, 0, 0); bike.pitch.rotation.set(0, 0, 0); bike.pitch.position.set(0, 0, 0); bike.pitch.add(bike.rider); bike.rider.position.set(0, 0, 0); bike.rider.rotation.set(0, 0, 0); tum = null; bx = 0; lane = 1; py = 0; vy = 0; air = false; }
   function spawnRow(){
     const z0 = -150, ls = [0, 1, 2].sort(() => rr() - .5), k = rr() < .35 ? 2 : 1;
@@ -264,43 +300,113 @@
     const fl = ls[k];
     if (rr() < .7) for (let i = 0; i < 5; i++) addHeart(lx[fl], .95, z0 - 3 + i * 2.2);
     else for (let i = 0; i < 5; i++) addHeart(lx[ls[0]], 1.0 + Math.sin(i / 4 * Math.PI) * 1.1, z0 - 4.4 + i * 2.2);
-    nextSp = dist + 17 + rr() * 10;
+    if (!magT && !pk.length && rr() < .12) addMag(lx[fl], z0 - 12); nextSp = dist + 17 + rr() * 10;
   }
   function addHeart(x0, y0, z0){ const m = new THREE.Mesh(hGeo, mat.heart); m.position.set(x0, y0, z0); scene.add(m); hl.push({ m, x: x0, y: y0, z: z0, on: 1 }); }
   function chk(){ const was = unl(); if (S.map === 'kazan') P.kd = Math.max(P.kd, Math.floor(dist)); if (S.wx === 'rain') P.rd = Math.max(P.rd, Math.floor(dist)); P.hr = Math.max(P.hr, hearts); LS.set('fbp', P); if (!was && unl()){ say('Все задания выполнены! BMW S1000RR уже в гараже 🏁', 5200); ui(); } }
   function countUp(el, to, suf, pre){ const t0 = performance.now(); (function f(){ const k = Math.min(1, (performance.now() - t0) / 900); el.textContent = (pre || '') + Math.round(to * (1 - Math.pow(1 - k, 3))) + (suf || ''); if (k < 1) requestAnimationFrame(f); })(); }
-  function start(){ clearItems(); resetBike(); mode = 'play'; dist = 0; hearts = 0; speed = 15; nextSp = 20; eg = {}; ov = 0; $('menu').hidden = true; $('over').hidden = true; $('hud').hidden = false; view(); if (!P.seen){ P.seen = 1; LS.set('fbp', P); say('Свайп влево и вправо, тап для прыжка', 4200); } }
+  function start(){ if (S.map === 'tour') buildWorld(); sndInit(); nitro = nOn = nk = combo = comboT = magT = 0; clearItems(); resetBike(); mode = 'play'; dist = 0; hearts = 0; speed = 15; nextSp = 20; eg = {}; ov = 0; $('menu').hidden = true; $('over').hidden = true; $('hud').hidden = false; view(); if (!P.seen){ P.seen = 1; LS.set('fbp', P); say('Свайп влево и вправо, тап прыжок, 🔥 нитро', 5200); } }
   function toMenu(){ clearItems(); resetBike(); mode = 'menu'; $('hud').hidden = true; $('over').hidden = true; $('menu').hidden = false; tab('home'); ui(); view(); }
   function crash(){
-    mode = 'dead'; const pb = P.best; P.best = Math.max(P.best, Math.floor(dist)); chk(); vib([60, 40, 140]); flash('#ff2a4a'); $('ob').textContent = Math.floor(dist) > pb ? 'Новый рекорд! 🎉' : 'Рекорд: ' + pb + ' м'; $('hud').hidden = true; shake = .6; const r = bike.rider; scene.attach(r);
+    mode = 'dead'; const pb = P.best; P.best = Math.max(P.best, Math.floor(dist)); chk(); vib([60, 40, 140]); tone(160, 40, .5, .12, 'sawtooth'); flash('#ff2a4a'); $('ob').textContent = Math.floor(dist) > pb ? 'Новый рекорд! 🎉' : 'Рекорд: ' + pb + ' м'; $('hud').hidden = true; shake = .6; const r = bike.rider; scene.attach(r);
     tum = { bv: V((rr() - .5) * 3, 5, -9), rv: V((rr() - .5) * 4, 7, -12), bs: V(4 + rr() * 3, 0, (rr() - .5) * 8), rs: V(rr() * 6, rr() * 6, rr() * 6) };
     for (let i = 0; i < 14; i++) emit(V(bx, .6, 0), V((rr() - .5) * 6, rr() * 5, (rr() - .5) * 6 + sp), .7, .25, 0xffc46a);
     setTimeout(() => { if (mode === 'dead'){ $('over').hidden = false; countUp($('od'), Math.floor(dist), ' м'); countUp($('oh'), hearts, '', '♥ '); } }, 1300);
   }
   function go(d){ if (mode !== 'play') return; const n = Math.max(0, Math.min(2, lane + d)); if (n !== lane){ lane = n; leanK = d; } }
 
+  // ---------- gameplay ----------
+  let nitro = 0, nOn = 0, nk = 0, combo = 0, comboT = 0, magT = 0, pk = [], AC, osc, og, flt; const cmE = $('cm');
+  function sndInit(){ if (AC) return; try { AC = new (window.AudioContext || window.webkitAudioContext)(); osc = AC.createOscillator(); osc.type = 'sawtooth'; flt = AC.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = 500; og = AC.createGain(); og.gain.value = 0; osc.connect(flt); flt.connect(og); og.connect(AC.destination); osc.start(); } catch (e) { AC = null; } }
+  function sndUpd(){ if (!AC) return; if (AC.state === 'suspended') AC.resume(); const t = AC.currentTime, on = mode === 'play' && !paused && S.snd !== 0; og.gain.setTargetAtTime(on ? .035 + nk * .02 : 0, t, .08); osc.frequency.setTargetAtTime(55 + (speed - 15) * 4 + nk * 30 + (air ? 25 : 0), t, .1); flt.frequency.setTargetAtTime(400 + speed * 18 + nk * 500, t, .1); }
+  function tone(f1, f2, d, v, ty){ if (!AC || S.snd === 0) return; const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain(); o.type = ty || 'sine'; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + d); g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d); }
+  function boost(){ if (mode === 'play' && !nOn && nitro >= .3){ nOn = 1; vib(30); tone(200, 800, .4, .06, 'sawtooth'); } }
+  function nearMiss(){
+    combo++; comboT = 3; nitro = Math.min(1, nitro + .12); vib(15); tone(520, 1040, .15, .05, 'triangle'); let t = ['ЛОВКО!', 'ОГОНЬ!', 'ВАУ!'][combo % 3] + ' x' + combo;
+    if (combo % 3 === 0){ hearts += 2; $('hhr').textContent = '♥ ' + hearts; t += ' +2♥'; chk(); }
+    cmE.textContent = t; cmE.style.animation = 'none'; void cmE.offsetWidth; cmE.style.animation = 'cmp 1s ease-out forwards';
+  }
+  function addMag(x0, z0){
+    const g = new THREE.Group(), t = new THREE.Mesh(geo('mg', () => new THREE.TorusGeometry(.32, .11, 8, 14, Math.PI)), mat.mag); g.add(t);
+    [-1, 1].forEach(s => { const e = box(.22, .2, .22, mat.white); e.position.set(s * .32, -.06, 0); g.add(e); }); g.position.set(x0, 1.1, z0); scene.add(g); pk.push({ g, x: x0, z: z0 });
+  }
+  $('nt').addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); boost(); });
+  addEventListener('keydown', e => { if (e.code === 'ShiftLeft' || e.code === 'KeyN') boost(); });
+  $('bSn').textContent = S.snd === 0 ? '🔇' : '🔊'; $('bSn').onclick = () => { S.snd = S.snd === 0 ? 1 : 0; LS.set('fb', S); $('bSn').textContent = S.snd === 0 ? '🔇' : '🔊'; };
+  // ---------- bear ----------
+  let bearE = null, bearDone = 0; const BM = 500;
+  function tex(w, h, fn){ const c = document.createElement('canvas'); c.width = w; c.height = h; fn(c.getContext('2d')); return new THREE.CanvasTexture(c); }
+  function bearMesh(){
+    const g = new THREE.Group(), pv = new THREE.Group(), br = M(0x6b4423), mz = M(0xc99c6c), mo = M(0x7a1f2f); g.add(pv);
+    const T = (m, sx, sy, sz, x, y, z, p) => { m.scale.set(sx, sy, sz); m.position.set(x, y, z); (p || pv).add(m); return m; };
+    T(sph(1, br), .85, 1.05, .7, 0, 1.4, 0); T(sph(1, mz), .55, .75, .3, 0, 1.35, .5);
+    const hd = new THREE.Group(); hd.position.y = 2.75; pv.add(hd); T(sph(.62, br), 1, 1, 1, 0, 0, 0, hd);
+    const eyes = [], arms = [];
+    [-1, 1].forEach(s => {
+      T(sph(.2, br), 1, 1, .8, s * .45, .5, 0, hd);
+      const e = new THREE.Group(); e.position.set(s * .24, .14, .5); e.add(sph(.15, mat.white)); const p = sph(.07, mat.black); p.position.z = .12; e.add(p); hd.add(e); eyes.push(e);
+      const a = new THREE.Group(); a.position.set(s * .95, 2.2, 0); T(sph(.3, br), .8, 1.9, .8, 0, -.7, 0, a); pv.add(a); arms.push(a);
+      T(sph(.4, br), 1, .9, 1.3, s * .45, .35, .1);
+    });
+    T(sph(.3, mz), 1, .8, 1, 0, -.15, .55, hd); T(sph(.09, mat.black), 1, 1, 1, 0, -.02, .83, hd);
+    const jw = T(sph(.22, mo), 1.2, .5, 1, 0, -.42, .45, hd);
+    const st = tex(256, 160, q => { q.fillStyle = '#7a5230'; q.fillRect(0, 0, 256, 160); q.strokeStyle = '#e8c08a'; q.lineWidth = 8; q.strokeRect(8, 8, 240, 144); q.fillStyle = '#fff3ee'; q.font = '900 78px sans-serif'; q.textAlign = 'center'; q.textBaseline = 'middle'; q.fillText(BM + ' м', 128, 84); });
+    const sg = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.19), new THREE.MeshBasicMaterial({ map: st })); sg.position.set(-1.2, 2.5, .3); sg.rotation.y = -.25; g.add(sg);
+    const po = cyl(.07, .08, 2.6, mat.wood, 6); po.position.set(-1.2, 1.3, .25); g.add(po);
+    return { g, pv, hd, eyes, arms, jw };
+  }
+  function spawnBear(){
+    bearDone = 1; const b = bearMesh(); b.g.position.set(6.6, 0, -150); b.g.scale.setScalar(1.2); b.g.traverse(m => m.castShadow = true); scene.add(b.g); bearE = b;
+    for (let i = 0; i < 6; i++) addHeart(2.4, 1.2 + Math.sin(i / 5 * Math.PI) * .9, -150 + i * 2.2);
+    nextSp = Math.max(nextSp, dist + 14);
+  }
+  function animBear(dt){
+    const b = bearE, bb = $('bb'); if (!b) return; const g = b.g;
+    if (mode === 'play') g.position.z += speed * dt;
+    const z = g.position.z, w = Math.max(0, Math.min(1, (z + 95) / 40)), a = Math.atan2(bx - g.position.x, -z), ya = Math.max(-1.1, Math.min(1.1, a));
+    b.pv.rotation.y = ya * .4; b.hd.rotation.y = ya * .6; b.pv.position.y = z < -10 ? Math.abs(Math.sin(tm * 11)) * .22 * w : 0;
+    b.eyes.forEach(e => e.scale.setScalar(1 + .9 * w)); b.jw.position.y = -.42 - .28 * w;
+    b.arms.forEach((m, i) => m.rotation.z = (i ? 1 : -1) * (.35 + w * 1.5 + Math.sin(tm * 14 + i) * .25 * w));
+    if (mode === 'play' && z > -88 && z < -6){
+      const v = b.hd.getWorldPosition(V(0, 0, 0)); v.y += 1.4; v.project(cam);
+      if (v.z < 1){ const x = Math.max(110, Math.min(innerWidth - 110, (v.x * .5 + .5) * innerWidth)), y = Math.max(90, Math.min(innerHeight - 120, (-v.y * .5 + .5) * innerHeight)), k = Math.min(1, (z + 88) / 6); bb.style.transform = `translate(${x}px,${y}px) translate(-50%,-115%) scale(${k})`; bb.hidden = false; } else bb.hidden = true;
+    } else bb.hidden = true;
+    if (mode === 'play' && z > 0 && !b.got){ b.got = 1; vib([20, 30, 20]); if (!P.bear){ P.bear = 1; LS.set('fbp', P); say('🐻 Ачивка: Видела медведя!', 3800); } }
+    if (z > 12){ scene.remove(g); bearE = null; bb.hidden = true; }
+  }
   // ---------- frame ----------
   function step(dt){
     const rain = S.wx === 'rain'; sp = mode === 'play' ? speed : mode === 'menu' ? 3 : Math.max(0, sp - 14 * dt);
     chunks.forEach(c => { c.position.z += sp * dt; if (c.position.z > 40){ c.position.z -= CH * L; fillChunk(c); } });
     let landed = false;
     if (mode === 'play'){
-      speed = Math.min(30, 15 + dist / 70); dist += speed * dt;
+      if (nOn){ nitro -= dt * .55; if (nitro <= 0){ nitro = 0; nOn = 0; } } nk += ((nOn ? 1 : 0) - nk) * Math.min(1, dt * 5);
+      comboT -= dt; if (comboT <= 0) combo = 0; if (magT > 0) magT -= dt;
+      speed = Math.min(30, 15 + dist / 70) + nk * 8; dist += speed * dt;
+      if (nk > .3 && rr() < .8) emit(V(bx, .5, .9), V((rr() - .5) * .8, .3, speed * .9 + 4), .35, .3, 0xff8a3c);
       bx += (lx[lane] - bx) * Math.min(1, dt * (rain ? 6 : 11));
       if (jumpReq && !air){ vy = 9.2; air = true; for (let i = 0; i < 5; i++) emit(V(bx, .1, .6), V((rr() - .5) * 2, 1, sp * .8), .5, .3, 0xb9b1a6); } jumpReq = false;
       if (air){ vy -= 26 * dt; py += vy * dt; if (py <= 0){ py = 0; air = false; landed = true; vib(8); shake = Math.max(shake, .14); for (let i = 0; i < 8; i++) emit(V(bx, .1, .4), V((rr() - .5) * 4, rr() * 2, sp * .8), .6, .35, 0xb9b1a6); } }
       obs.forEach(o => o.z += speed * dt); hl.forEach(a => { a.z += speed * dt; a.m.rotation.y += dt * 3; a.m.position.set(a.x, a.y + Math.sin(tm * 4 + a.z) * .08, a.z); });
       obs.forEach(o => o.g.position.z = o.z);
+      for (const o of obs) if (!o.nm && o.z > .9){ o.nm = 1; if (Math.abs(o.x - bx) < o.w / 2 + 1.1) nearMiss(); }
+      if (magT > 0) hl.forEach(a => { if (a.on && a.z > -16 && a.z < 3 && Math.abs(a.x - bx) < 5){ const k = Math.min(1, dt * 7); a.x += (bx - a.x) * k; a.y += (py + .95 - a.y) * k; } });
+      pk = pk.filter(p => { p.z += speed * dt; p.g.rotation.y += dt * 3; p.g.position.set(p.x, 1.1 + Math.sin(tm * 4) * .1, p.z);
+        if (Math.abs(p.z) < 1 && Math.abs(p.x - bx) < 1.2 && Math.abs(1.1 - (py + .95)) < 1.1){ magT = 7; vib(20); tone(400, 900, .25, .06, 'square'); say('🧲 Магнит! Сердечки сами летят к тебе', 2200); scene.remove(p.g); return false; }
+        if (p.z > 8){ scene.remove(p.g); return false; } return true; });
       for (const o of obs) if (o.z > -.9 && o.z < .9 && Math.abs(o.x - bx) < o.w / 2 + .4 && py < o.h - .1){ crash(); break; }
-      if (mode === 'play') hl.forEach(a => { if (a.on && Math.abs(a.z) < .9 && Math.abs(a.x - bx) < 1.1 && Math.abs(a.y - (py + .95)) < 1){ a.on = 0; scene.remove(a.m); hearts++; vib(12); flash('#ff5fae'); $('hhr').classList.remove('pop'); void $('hhr').offsetWidth; $('hhr').classList.add('pop'); for (let i = 0; i < 8; i++) emit(V(a.x, a.y, a.z), V((rr() - .5) * 5, rr() * 4, (rr() - .5) * 5 + sp), .6, .22, 0xff5fae); chk(); } });
+      if (mode === 'play') hl.forEach(a => { if (a.on && Math.abs(a.z) < .9 && Math.abs(a.x - bx) < 1.1 && Math.abs(a.y - (py + .95)) < 1){ a.on = 0; scene.remove(a.m); hearts++; vib(8); tone(880, 1320, .12, .04); nitro = Math.min(1, nitro + .03); $('hhr').classList.remove('pop'); void $('hhr').offsetWidth; $('hhr').classList.add('pop'); for (let i = 0; i < 8; i++) emit(V(a.x, a.y, a.z), V((rr() - .5) * 5, rr() * 4, (rr() - .5) * 5 + sp), .6, .22, 0xff5fae); chk(); } });
       obs = obs.filter(o => o.z < 8 || (scene.remove(o.g), false)); hl = hl.filter(a => a.on && (a.z < 8 || (scene.remove(a.m), false)));
-      if (dist >= nextSp) spawnRow();
-      if (dist >= 120 && !eg.a){ eg.a = 1; say('Права сдашь на отлично 🪪'); } if (S.map === 'kazan' && dist >= 400 && !eg.b){ eg.b = 1; say('Cool cool'); }
-      hudT -= dt; if (hudT <= 0){ hudT = .1; $('hdist').textContent = Math.floor(dist) + ' м'; $('hhr').textContent = '♥ ' + hearts; if (Math.floor(dist / 50) !== ov){ ov = Math.floor(dist / 50); chk(); } }
+      if (dist >= nextSp) spawnRow(); if (S.map === 'forest' && !bearDone && dist >= BM - 150) spawnBear();
+      if (S.map === 'tour'){ const nm = TOUR[Math.floor(dist / 500) % TOUR.length]; if (nm !== CM){ CM = nm; setTimeout(() => { if (S.map === 'tour' && mode === 'play'){ setGround(nm); snow.visible = nm === 'winter'; say(TN[nm]); } }, 9000); } }
+      if (dist >= 120 && !eg.a){ eg.a = 1; say('Права сдашь на отлично 🪪'); } if (S.map === 'kazan' && dist >= 400 && !eg.b){ eg.b = 1; say('Cool Cool'); }
+      hudT -= dt; if (hudT <= 0){ hudT = .1; $('hdist').textContent = Math.floor(dist) + ' м'; $('nt').style.setProperty('--p', Math.round(nitro * 100) + '%'); $('nt').classList.toggle('rdy', nitro >= .3 || nOn === 1); $('hhr').textContent = '♥ ' + hearts + (magT > 0 ? ' 🧲' : ''); if (Math.floor(dist / 50) !== ov){ ov = Math.floor(dist / 50); chk(); } }
     }
-    animBike(dt, landed);
+    animBike(dt, landed); animBear(dt);
     updP(dt);
     if (rain){ const a = rainG.attributes.position; for (let i = 0; i < 300; i++){ const j = i * 6; let y0 = a.array[j + 1] - 26 * dt; if (y0 < 0){ y0 += 14; } a.array[j + 1] = y0; a.array[j + 4] = y0 + .7; } a.needsUpdate = true; rainL.position.set(cam.position.x, 0, cam.position.z); }
+    const gk = Math.min(1, dt * 1.2); mat.side.color.lerp(gtc, gk); mat.road.color.lerp(rtc, gk);
+    if (snow.visible){ const a = snG.attributes.position; for (let i = 0; i < 260; i++){ const j = i * 3; let y0 = a.array[j + 1] - 2.2 * dt; if (y0 < 0) y0 += 12; a.array[j + 1] = y0; a.array[j] += Math.sin(tm + i) * .4 * dt; } a.needsUpdate = true; snow.position.set(cam.position.x, 0, cam.position.z); }
     const fast = mode === 'play' && speed > 19; slL.material.opacity += ((fast ? Math.min(.45, (speed - 19) * .04) : 0) - slL.material.opacity) * Math.min(1, dt * 4);
     if (slL.material.opacity > .01){ const a = slG.attributes.position; for (let i = 0; i < 40; i++){ const j = i * 6; let z0 = a.array[j + 2] + sp * 2.4 * dt; if (z0 > 4) z0 = -30; a.array[j + 2] = z0; a.array[j + 5] = z0 - speed * .12; a.array[j + 3] = a.array[j]; a.array[j + 4] = a.array[j + 1]; } a.needsUpdate = true; slL.position.set(0, 0, cam.position.z - 2); }
     // camera
@@ -336,11 +442,11 @@
   let fa = 0, fc = 0;
   function frame(t){ const dt = Math.min(.033, (t - last) / 1000); last = t;
     if (!paused){ tm += dt; step(dt); if (mode === 'play'){ fa += dt; fc++; if (fa > 3){ if (fc / fa < 36 && qL < 3){ qL++; setQ(); } fa = fc = 0; } } }
-    R.render(scene, cam); requestAnimationFrame(frame); }
+    sndUpd(); R.render(scene, cam); requestAnimationFrame(frame); }
 
   // ---------- menu UI ----------
-  const MAPS = [['kazan','Казань'],['forest','Лес'],['river','Набережная']], WX = [['day','День'],['night','Ночь'],['dusk','Закат'],['rain','Дождь']];
-  function pick(k, v){ S[k] = v; LS.set('fb', S); if (k === 'bike') swap(); if (k === 'map') buildWorld(); if (k === 'wx') applyWx(); applyCol(); ui(); }
+  const MAPS = [['kazan','Казань'],['forest','Лес'],['river','Набережная'],['mountain','Серпантин'],['winter','Зима'],['neon','Неон'],['tour','Микс']], WX = [['day','День'],['night','Ночь'],['dusk','Закат'],['rain','Дождь']];
+  function pick(k, v){ if (k === 'map' && v === 'neon' && S.wx === 'day') S.wx = 'night'; S[k] = v; LS.set('fb', S); if (k === 'bike') swap(); if (k === 'map') buildWorld(); if (k === 'wx') applyWx(); applyCol(); ui(); }
   function chips(id, list, key){ const e = $(id); e.innerHTML = ''; list.forEach(([v, l, dis]) => { const b = document.createElement('button'); b.className = 'ch' + (S[key] === v ? ' on' : ''); b.textContent = l; b.disabled = !!dis; b.onclick = () => pick(key, v); e.appendChild(b); }); }
   function sws(id, list, key){ const e = $(id); e.innerHTML = ''; list.forEach(v => { const b = document.createElement('button'); b.className = (v ? 'sw' : 'ch') + (S[key] === v ? ' on' : ''); if (v) b.style.background = v; else b.textContent = 'без'; b.setAttribute('aria-label', v || 'без'); b.onclick = () => pick(key, v); e.appendChild(b); }); }
   function ui(){

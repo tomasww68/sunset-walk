@@ -16,6 +16,16 @@
   .pn{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,520px);max-height:54vh;overflow:auto;padding:22px 20px;border-radius:26px;background:linear-gradient(160deg,rgba(24,10,40,.8),rgba(24,10,40,.52));border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);text-align:center;z-index:10;animation:pin .55s cubic-bezier(.16,1,.3,1);touch-action:pan-y}
   @keyframes pin{from{opacity:0;transform:translate(-50%,18px) scale(.96)}}
   [hidden]{display:none!important}
+  .row.sc{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:4px;scrollbar-width:none}.row.sc::-webkit-scrollbar{display:none}.row.sc>*{flex:none}
+  .pn .ch{padding:11px 16px;font-size:14px}
+  .b.big{width:100%;font-size:17px;padding:18px 24px;margin:6px 0}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
+  .tiles .b{padding:12px 4px;font-size:22px;display:flex;flex-direction:column;align-items:center;gap:4px;border-radius:18px}
+  .tiles small{font:600 11px Manrope,sans-serif;color:var(--dim)}
+  .hb{display:flex;align-items:center;gap:12px;position:sticky;top:-22px;z-index:2;margin:-22px -20px 8px;padding:14px 20px;background:rgba(24,10,40,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .hb h1{font-size:26px!important;flex:1;text-align:left}
+  #hud #wh{position:fixed;left:16px;bottom:calc(28px + env(safe-area-inset-bottom,0px));width:76px;height:76px;margin:0;padding:0;font-size:30px;border-radius:50%;border:3px solid rgba(255,255,255,.35);background:conic-gradient(#5fd4ff var(--p,100%),rgba(0,0,0,.45) 0);pointer-events:auto;touch-action:none;backdrop-filter:none;-webkit-backdrop-filter:none;-webkit-touch-callout:none}
+  #hud #wh.on{box-shadow:0 0 26px #5fd4ff}
   #hud #nt{position:fixed;right:16px;bottom:calc(28px + env(safe-area-inset-bottom,0px));width:76px;height:76px;margin:0;padding:0;font-size:32px;border-radius:50%;border:3px solid rgba(255,255,255,.35);background:conic-gradient(#ff8a3c var(--p,0%),rgba(0,0,0,.45) 0);opacity:.55;pointer-events:auto;touch-action:none;backdrop-filter:none;-webkit-backdrop-filter:none}
   #hud #nt.rdy{opacity:1;box-shadow:0 0 26px #ff8a3c}
   #cm{position:fixed;left:50%;top:24%;transform:translateX(-50%);z-index:15;pointer-events:none;font:900 28px Unbounded,sans-serif;color:#ffe3f1;text-shadow:0 2px 14px #ff5fae,0 0 4px #000;opacity:0;white-space:nowrap}
@@ -48,36 +58,44 @@
   #hud button{margin-left:auto;border:0;font:600 13px Manrope,sans-serif;pointer-events:auto}
   .pop{animation:hp .35s}
   @keyframes hp{50%{transform:scale(1.12)}}
-  .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:rgba(255,243,238,.96);color:#2a1038;font:600 13px Unbounded,sans-serif;padding:13px 22px;border-radius:30px;opacity:0;transition:.35s;z-index:300;max-width:90vw;text-align:center;pointer-events:none}
+  .toast{position:fixed;left:50%;top:calc(64px + env(safe-area-inset-top,0px));transform:translate(-50%,-14px);background:rgba(255,243,238,.96);color:#2a1038;font:600 13px Unbounded,sans-serif;padding:13px 22px;border-radius:30px;opacity:0;transition:.35s;z-index:300;max-width:90vw;text-align:center;pointer-events:none}
   .toast.on{opacity:1;transform:translate(-50%,0)}
   .player{margin-top:12px}.player:empty{display:none}.player iframe{width:100%;border:0;border-radius:16px}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas><div id="vg"></div><div id="fl"></div>
-<div id="hud" hidden><span id="hdist">0 м</span><span id="hhr">♥ 0</span><button id="hm">Пауза</button><button id="nt">🔥</button></div>
+<div id="hud" hidden><span id="hdist">0 м</span><span id="hhr">♥ 0</span><button id="hm">Пауза</button><button id="nt">🔥</button><button id="wh">🏍️</button></div>
 
 <div class="pn" id="menu">
   <div id="home">
     <h1>for baby</h1>
     <p class="sub">Казань, Darex 250 и ты за рулём. Свайп влево и вправо, тап или свайп вверх, чтобы прыгнуть.</p>
-    <div class="row"><button class="b" id="bPlay">Поехали</button><button class="b g" id="bGar">Гараж</button><button class="b g" id="bMis">Задания</button><button class="b g" id="bSn">🔊</button></div>
-    <p class="lb">Карта</p><div class="row" id="mp"></div>
-    <p class="lb">Условия</p><div class="row" id="wx"></div>
+    <p class="sub" id="st"></p>
+    <button class="b big" id="bPlay">Поехали</button>
+    <div class="tiles"><button class="b g" id="bGar">🏍️<small>Гараж</small></button><button class="b g" id="bShop">🛒<small>Магазин</small></button><button class="b g" id="bMis">🎯<small>Задания</small></button><button class="b g" id="bSn">🔊<small>Звук</small></button></div>
+    <p class="lb">Карта</p><div class="row sc" id="mp"></div>
+    <p class="lb">Условия</p><div class="row sc" id="wx"></div>
     <!-- ===== СЮДА ВСТАВЬ ПЛЕЕР С ТРЕКАМИ: код <iframe> из Яндекс Музыки вместо следующей пометки ===== -->
     <div class="player"><!-- ВСТАВЬ <iframe> ЗДЕСЬ --></div>
   </div>
   <div id="gar" hidden>
-    <h1 style="font-size:34px">Гараж</h1>
+    <div class="hb"><button class="ch" id="bk1">‹ Назад</button><h1>Гараж</h1></div>
     <p class="lb">Мотоцикл</p><div class="row" id="bk"></div>
     <p class="lb">Цвет мотоцикла</p><div class="row" id="cb"></div>
     <p class="lb">Шлем</p><div class="row" id="ch"></div>
     <p class="lb">Рожки</p><div class="row" id="hn"></div>
     <p class="lb">Худи</p><div class="row" id="hx"></div>
+    <p class="lb" id="glcl" hidden>Подсветка байка</p><div class="row" id="glc" hidden></div><p class="lb" id="flcl" hidden>Пламя нитро</p><div class="row" id="flc" hidden></div>
     <div class="row"><button class="b" id="bBack1">Готово</button></div>
   </div>
+  <div id="shp" hidden>
+    <div class="hb"><button class="ch" id="bk3">‹ Назад</button><h1>Магазин</h1></div><p class="sub">У тебя <b id="wl">♥ 0</b></p><div id="us"></div>
+    <div class="row"><button class="b g" id="bExp">Код сохранения</button><button class="b g" id="bImp">Вставить код</button></div>
+    <div class="row"><button class="b" id="bBack3">Назад</button></div>
+  </div>
   <div id="mis" hidden>
-    <h1 style="font-size:34px">Задания</h1>
+    <div class="hb"><button class="ch" id="bk2">‹ Назад</button><h1>Задания</h1></div>
     <div id="ms"></div>
     <div class="row"><button class="b" id="bBack2">Назад</button></div>
   </div>
@@ -99,8 +117,8 @@
   if (typeof THREE === 'undefined'){ document.body.innerHTML = '<p style="padding:30px;font:16px sans-serif">Не загрузилась библиотека 3D. Проверь интернет и обнови страницу.</p>'; throw new Error('no THREE'); }
   let mode = 'menu';
   const LS = { get(k, d){ try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
-  const S = Object.assign({ map:'kazan', wx:'day', bike:'darex', body:'#2f6bff', helmet:'#111118', horns:'#ff5fae', hoodie:'#15151b' }, LS.get('fb', {}));
-  const P = Object.assign({ kd:0, hr:0, rd:0, best:0, seen:0, bear:0 }, LS.get('fbp', {}));
+  const S = Object.assign({ map:'kazan', wx:'dusk', bike:'darex', body:'#2f6bff', helmet:'#111118', horns:'#ff5fae', hoodie:'#15151b' }, LS.get('fb', {}));
+  const P = Object.assign({ kd:0, hr:0, rd:0, best:0, seen:0, bear:0, w:0, up:{}, own:{} }, LS.get('fbp', {}));
   const unl = () => P.kd >= 1000 && P.hr >= 30 && P.rd >= 600;
   if (S.bike === 'bmw' && !unl()) S.bike = 'darex';
   let tt; function say(m, ms){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), ms || 2600); }
@@ -142,7 +160,7 @@
     return [new THREE.CanvasTexture(a), new THREE.CanvasTexture(e)];
   }
   const [tA, tE] = texes();
-  mat.lf = [mat.leaf, mat.leaf, M(0x4a8a3a), M(0xc58a2a), M(0xb5482e)]; mat.snow = M(0xf4f8ff, { roughness: 1 }); mat.nz = [0xff2fb4, 0x2fd4ff, 0xb44dff, 0xffd02f].map(c => M(c, { emissive: c, emissiveIntensity: 1.7 })); mat.mag = M(0xe4002b, { emissive: 0x660011 }); mat.bld = [0xc9d2e6, 0xd8c8c0, 0xb7c4cc].map(c => M(c, { map: tA, emissive: 0xffffff, emissiveMap: tE, emissiveIntensity: 0 }));
+  mat.lf = [mat.leaf, mat.leaf, M(0x4a8a3a), M(0xc58a2a), M(0xb5482e)]; mat.snow = M(0xf4f8ff, { roughness: 1 }); mat.nz = [0xff2fb4, 0x2fd4ff, 0xb44dff, 0xffd02f].map(c => M(c, { emissive: c, emissiveIntensity: 1.7 })); mat.mag = M(0xe4002b, { emissive: 0x660011 }); mat.stone = M(0xd7cfc2, { roughness: 1 }); mat.grass = M(0x4f8a4a, { roughness: 1 }); mat.blue = M(0x3aa6c8, { roughness: .4, metalness: .2 }); mat.bronze = M(0x6b4a3a, { roughness: .5, metalness: .5 }); mat.grn = M(0x2f9a78); mat.yel = M(0xf2b632); mat.brick = M(0x9a3b2e); mat.bld = [0xc9d2e6, 0xd8c8c0, 0xb7c4cc].map(c => M(c, { map: tA, emissive: 0xffffff, emissiveMap: tE, emissiveIntensity: 0 }));
   function limb(a, b, r, m){ const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), d = B.clone().sub(A), l = d.length(), o = cyl(r, r, +l.toFixed(3), m, 8); o.position.copy(A).add(B).multiplyScalar(.5); o.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); return o; }
 
   // ---------- weather and world ----------
@@ -166,7 +184,7 @@
   function applyWx(){
     const c = WXC[S.wx], n = S.wx === 'night', d = S.wx === 'dusk', r = S.wx === 'rain'; scene.background = new THREE.Color(c.bg); scene.fog = new THREE.Fog(c.bg, S.map === 'forest' ? c.fn * .55 : c.fn, S.map === 'forest' ? c.ff * .7 : c.ff);
     skyU.t.value.set(c.st); skyU.b.value.set(c.bg);
-    hemi.color.set(c.hc); hemi.groundColor.set(c.hs); hemi.intensity = c.hi; sun.intensity = c.di; sun.color.set(n ? 0x8899ff : d ? 0xff9a55 : 0xffffff); head.intensity = c.ni * 2.4;
+    hemi.color.set(c.hc); hemi.groundColor.set(c.hs); hemi.intensity = c.hi; sun.intensity = c.di; sun.color.set(n ? 0x8899ff : d ? 0xff9a55 : 0xffffff); head.intensity = c.ni * 2.4 * (1 + .4 * UPL('lgt')); head.distance = 46 + 14 * UPL('lgt');
     sunO.set(d ? -16 : -8, d ? 7 : 15, d ? 9 : 6);
     mat.bld.forEach(m => m.emissiveIntensity = n ? 1.3 : d ? .5 : 0); mat.lamp.emissiveIntensity = n ? 2.2 : d ? 1 : .2; stars.visible = n; orb.visible = !r; orb.position.y = d ? 16 : 45; orb.material.color.set(n ? 0xfff6d8 : d ? 0xffb070 : 0xfff1b8); rainL.visible = r;
     clouds.visible = !n; cM.color.set(d ? 0xffc2a0 : r ? 0x8f9aa6 : 0xffffff);
@@ -176,7 +194,7 @@
   plane(9.4, 340, mat.road, 0, 0); const gr = plane(80, 340, mat.side, 44, -.02), gl = plane(80, 340, mat.side, -44, -.02), pav = plane(1.6, 340, mat.pav, -5.5, .01), water = plane(90, 340, mat.water, -50, -.9);
   [-4.6, 4.6].forEach(x0 => { const e = box(.14, .02, 340, mat.dash); e.position.set(x0, .015, -140); scene.add(e); });
   let CM = 'kazan';
-  const GC = { kazan:[0x7c8f6a, 0x2d2d36], forest:[0x4c7a45, 0x2d2d36], river:[0x7c8f6a, 0x2d2d36], mountain:[0x7a6f66, 0x34343c], neon:[0x1a1530, 0x1d1b2e], winter:[0xe8f0f8, 0x8d96a2] }, gtc = new THREE.Color(), rtc = new THREE.Color(),
+  const GC = { kazan:[0x4a7fa8, 0x34343c], forest:[0x4c7a45, 0x2d2d36], river:[0x7c8f6a, 0x2d2d36], mountain:[0x7a6f66, 0x34343c], neon:[0x1a1530, 0x1d1b2e], winter:[0xe8f0f8, 0x8d96a2] }, gtc = new THREE.Color(), rtc = new THREE.Color(),
     TOUR = ['kazan', 'forest', 'mountain', 'winter', 'neon'], TN = { kazan:'🕌 Казань', forest:'🌲 Лес', mountain:'⛰️ Серпантин', winter:'❄️ Зима', neon:'🌃 Неон' };
   function setGround(m, now){ gtc.set(GC[m][0]); rtc.set(GC[m][1]); if (now){ mat.side.color.copy(gtc); mat.road.color.copy(rtc); } }
   const snG = new THREE.BufferGeometry(), snp = new Float32Array(260 * 3); for (let i = 0; i < 260; i++) snp.set([(Math.random() - .5) * 26, Math.random() * 12, -30 + Math.random() * 38], i * 3);
@@ -186,6 +204,28 @@
   function soy(){ const g = new THREE.Group(); let y = 0; [[3,4],[2.5,3.6],[2,3.2],[1.5,2.8]].forEach(([w, h]) => { const b = box(w, h, w, mat.wall); b.position.y = y + h / 2; g.add(b); y += h; }); const c = cone(1.3, 4, mat.teal, 8); c.position.y = y + 2; g.add(c); g.rotation.z = .05; return g; }
   function kul(){ const g = new THREE.Group(), b = box(11, 6, 11, mat.wall); b.position.y = 3; g.add(b); const d = sph(3.6, mat.teal); d.scale.y = .8; d.position.y = 6; g.add(d); [[-6,-6],[6,-6],[-6,6],[6,6]].forEach(([x0, z0]) => { const m = cyl(.4, .5, 17, mat.wall, 8); m.position.set(x0, 8.5, z0); g.add(m); const t = cone(.7, 3.4, mat.teal, 8); t.position.set(x0, 18.5, z0); g.add(t); }); return g; }
   function kazan(){ const g = new THREE.Group(), b = new THREE.Mesh(geo('bowl', () => new THREE.SphereGeometry(7, 18, 10, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2)), mat.goldb); b.scale.y = .8; b.position.y = 6; g.add(b); const r = new THREE.Mesh(geo('rim', () => new THREE.TorusGeometry(7, .45, 6, 22)), mat.goldb); r.rotation.x = Math.PI / 2; r.position.y = 6; g.add(r); const l = sph(5.6, mat.goldb); l.scale.y = .35; l.position.y = 6.2; g.add(l); [-1, 1].forEach(s => { const h = new THREE.Mesh(geo('hd', () => new THREE.TorusGeometry(1.1, .22, 6, 12)), mat.goldb); h.position.set(s * 7.4, 5.4, 0); h.rotation.y = Math.PI / 2; g.add(h); }); return g; }
+  function kulS(){
+    const g = new THREE.Group(), P = (m, x, y, z) => { m.position.set(x, y, z); g.add(m); return m; };
+    P(box(20, 1, 16, mat.stone), 0, .5, 0); P(box(11, 5, 9, mat.wall), 0, 3.5, 0); P(cyl(3.6, 3.6, 2.6, mat.wall, 14), 0, 7.3, 0);
+    P(sph(3.6, mat.blue), 0, 8.6, 0).scale.y = .85; P(sph(6.2, mat.blue), 0, 3.4, -2).scale.set(1.25, .6, 1);
+    [-3.6, 0, 3.6].forEach(x => P(box(1.1, 2, .2, mat.lamp), x, 3, -4.6));
+    [[-8, -6], [8, -6], [-8, 6], [8, 6]].forEach(([x, z]) => { P(cyl(.55, .75, 20, mat.wall, 10), x, 11, z); P(cyl(1, 1, .35, mat.wall, 10), x, 15, z); P(cone(.7, 5, mat.blue, 8), x, 22.5, z); });
+    return g;
+  }
+  function fam(){
+    const g = new THREE.Group(), P = (m, x, y, z) => { m.position.set(x, y, z); g.add(m); return m; };
+    P(cyl(4.4, 5.2, 6, mat.stone, 14), 0, 3, 0); [-1.6, 0, 1.6].forEach(x => P(box(1.2, 3.2, .3, mat.lamp), x, 2.4, -5));
+    P(cyl(8, 5.4, 4.8, mat.bronze, 18), 0, 8.4, 0); P(cyl(7.8, 7.8, .3, mat.bronze, 18), 0, 10.7, 0);
+    const rm = new THREE.Mesh(geo('frim', () => new THREE.TorusGeometry(8, .35, 6, 24)), mat.bronze); rm.rotation.x = Math.PI / 2; P(rm, 0, 10.8, 0);
+    const bd = new THREE.Mesh(geo('fband', () => new THREE.TorusGeometry(6.9, .25, 6, 24)), mat.goldb); bd.rotation.x = Math.PI / 2; P(bd, 0, 8.9, 0);
+    return g;
+  }
+  function krem(){
+    const g = new THREE.Group(), P = (m, x, y, z) => { m.position.set(x, y, z); g.add(m); return m; };
+    P(box(26, 5, 1.6, mat.wall), 0, 2.5, 0); for (let i = 0; i < 13; i++) P(box(1, .8, 1.7, mat.wall), -12 + i * 2, 5.4, 0);
+    [-12, 12].forEach(x => { P(box(3.2, 9, 3.2, mat.wall), x, 4.5, 0); P(cone(2.5, 3.6, mat.brick, 4), x, 10.8, 0); });
+    const t = soy(); t.position.set(-4, 0, -3); t.scale.setScalar(1.3); g.add(t); return g;
+  }
   function fillChunk(ch){
     while (ch.children.length) ch.remove(ch.children[0]);
     const n = ++cn, A = (m, x0, y0, z0) => { m.position.set(x0, y0, z0); ch.add(m); return m; }, rz = () => (Math.random() - .5) * L, bl = (w, hh, d) => box(w, hh, d, mat.bld[Math.floor(Math.random() * 3)]);
@@ -216,6 +256,20 @@
       }
       if (n % 4 === 1){ [-1, 1].forEach(sx => A(box(.3, 7.4, .3, mat.pole), sx * 5.6, 3.7, 0)); A(box(11.5, .45, .45, nz()), 0, 7.4, 0); }
     } else if (CM === 'kazan'){
+      lamp(-1); lamp(1);
+      A(box(10.6, .5, L, mat.pav), 0, -.3, 0); A(box(.12, .1, L, mat.yel), -4.95, 1, 0); A(box(.12, .1, L, mat.steel), 4.95, 1, 0);
+      for (let i = 0; i < 5; i++){ const z0 = -L / 2 + i * 6 + 2; A(box(.1, 1, .1, mat.yel), -4.95, .5, z0); A(box(.1, 1, .1, mat.steel), 4.95, .5, z0); }
+      for (const sx of [-1, 1]){
+        A(box(78, .5, L, mat.grass), sx * 61, -.2, 0); A(box(4, .56, L, mat.stone), sx * 24, -.2, 0); A(box(.5, .06, L, mat.lamp), sx * 24, .11, 0);
+        for (let i = 0; i < 3; i++){ const t = new THREE.Group(), tr = cyl(.2, .3, 1.6, mat.wood, 6); tr.position.y = .8; t.add(tr); const cr = sph(1.5, mat.lf[Math.random() < .8 ? 2 : 3]); cr.position.y = 2.6; t.add(cr); A(t, sx * (28 + Math.floor(Math.random() * 16)), 0, rz()); }
+        const h0 = 16 + Math.floor(Math.random() * 20); A(bl(10, h0, 10), sx * (70 + Math.floor(Math.random() * 20)), h0 / 2, rz());
+      }
+      const k = n % 8;
+      if (k === 1){ const m = kulS(); m.rotation.y = -Math.PI / 2; A(m, -38, 0, 0); }
+      if (k === 3){ const m = krem(); m.rotation.y = Math.PI / 2; A(m, -32, 0, 0); }
+      if (k === 5){ const m = fam(); m.rotation.y = Math.PI / 2; A(m, 38, 0, 0); }
+      if (n % 5 === 2){ [-1, 1].forEach(sx => ch.add(limb([sx * 5.8, 0, 0], [0, 24, 0], .45, mat.grn))); for (let i = 1; i <= 5; i++) [-1, 1].forEach(sx => [-1, 1].forEach(sz => ch.add(limb([0, 24, 0], [sx * 4.8, 1.1, sz * i * 2.8], .035, mat.orange)))); }
+    } else if (CM === 'kazan_old'){
       lamp(-1); lamp(1); A(box(1.4, 4, L, mat.wall), 9.5, 2, 0); for (let i = 0; i < 15; i++) A(box(1.4, .8, 1, mat.wall), 9.5, 4.4, -L / 2 + i * 2 + 1);
       if (n % 2){ A(cyl(1.6, 1.8, 8, mat.wall, 10), 9.5, 4, 0); A(cone(2, 2.4, mat.teal, 10), 9.5, 9.2, 0); }
       if (n % 7 === 2) A(soy(), 15, 0, 0); if (n % 7 === 5) A(kul(), -24, 0, 0); if (n % 9 === 4) A(kazan(), -26, 0, 0);
@@ -272,7 +326,7 @@
     buildRider(pz, B); const bs = new THREE.Mesh(new THREE.CircleGeometry(1, 16), new THREE.MeshBasicMaterial({ color: 0, transparent: true, opacity: .35 })); bs.rotation.x = -Math.PI / 2; bs.position.y = .02; bs.scale.set(.6, 1.3, 1); root.add(bs); B.bs = bs; return B;
   }
   let bike; function applyCol(){ mat.body.color.set(S.body); mat.helmet.color.set(S.helmet); mat.hoodie.color.set(S.hoodie); mat.horns.color.set(S.horns || '#ff5fae'); bike.horns.forEach(h => h.visible = !!S.horns); }
-  function swap(){ if (bike) scene.remove(bike.root); bike = buildBike(S.bike); bike.root.traverse(o => { if (o.isMesh && o !== bike.bs) o.castShadow = true; }); scene.add(bike.root); applyCol(); }
+  function swap(){ if (bike) scene.remove(bike.root); bike = buildBike(S.bike); bike.root.traverse(o => { if (o.isMesh && o !== bike.bs) o.castShadow = true; }); scene.add(bike.root); applyCol(); applyCos(); }
 
   // ---------- items ----------
   const hs0 = new THREE.Shape(); hs0.moveTo(0, -.5); hs0.bezierCurveTo(-.9, .1, -.5, .75, 0, .3); hs0.bezierCurveTo(.5, .75, .9, .1, 0, -.5);
@@ -305,10 +359,10 @@
   function addHeart(x0, y0, z0){ const m = new THREE.Mesh(hGeo, mat.heart); m.position.set(x0, y0, z0); scene.add(m); hl.push({ m, x: x0, y: y0, z: z0, on: 1 }); }
   function chk(){ const was = unl(); if (S.map === 'kazan') P.kd = Math.max(P.kd, Math.floor(dist)); if (S.wx === 'rain') P.rd = Math.max(P.rd, Math.floor(dist)); P.hr = Math.max(P.hr, hearts); LS.set('fbp', P); if (!was && unl()){ say('Все задания выполнены! BMW S1000RR уже в гараже 🏁', 5200); ui(); } }
   function countUp(el, to, suf, pre){ const t0 = performance.now(); (function f(){ const k = Math.min(1, (performance.now() - t0) / 900); el.textContent = (pre || '') + Math.round(to * (1 - Math.pow(1 - k, 3))) + (suf || ''); if (k < 1) requestAnimationFrame(f); })(); }
-  function start(){ if (S.map === 'tour') buildWorld(); sndInit(); nitro = nOn = nk = combo = comboT = magT = 0; clearItems(); resetBike(); mode = 'play'; dist = 0; hearts = 0; speed = 15; nextSp = 20; eg = {}; ov = 0; $('menu').hidden = true; $('over').hidden = true; $('hud').hidden = false; view(); if (!P.seen){ P.seen = 1; LS.set('fbp', P); say('Свайп влево и вправо, тап прыжок, 🔥 нитро', 5200); } }
+  function start(){ if (S.map === 'tour') buildWorld(); sndInit(); nitro = nOn = nk = combo = comboT = magT = 0; shield = UPL('shd'); wE = 1; wT = 0; wk = 0; wOn = 0; clearItems(); resetBike(); mode = 'play'; dist = 0; hearts = 0; speed = 15; nextSp = 20; eg = {}; ov = 0; $('menu').hidden = true; $('over').hidden = true; $('hud').hidden = false; view(); if (!P.seen){ P.seen = 1; LS.set('fbp', P); say('Свайп влево и вправо, тап прыжок, 🔥 нитро', 5200); } }
   function toMenu(){ clearItems(); resetBike(); mode = 'menu'; $('hud').hidden = true; $('over').hidden = true; $('menu').hidden = false; tab('home'); ui(); view(); }
   function crash(){
-    mode = 'dead'; const pb = P.best; P.best = Math.max(P.best, Math.floor(dist)); chk(); vib([60, 40, 140]); tone(160, 40, .5, .12, 'sawtooth'); flash('#ff2a4a'); $('ob').textContent = Math.floor(dist) > pb ? 'Новый рекорд! 🎉' : 'Рекорд: ' + pb + ' м'; $('hud').hidden = true; shake = .6; const r = bike.rider; scene.attach(r);
+    mode = 'dead'; const pb = P.best; P.best = Math.max(P.best, Math.floor(dist)); chk(); vib([60, 40, 140]); wk = 0; wOn = 0; wT = 0; tone(160, 40, .5, .12, 'sawtooth'); flash('#ff2a4a'); $('ob').textContent = Math.floor(dist) > pb ? 'Новый рекорд! 🎉' : 'Рекорд: ' + pb + ' м'; $('hud').hidden = true; shake = .6; const r = bike.rider; scene.attach(r);
     tum = { bv: V((rr() - .5) * 3, 5, -9), rv: V((rr() - .5) * 4, 7, -12), bs: V(4 + rr() * 3, 0, (rr() - .5) * 8), rs: V(rr() * 6, rr() * 6, rr() * 6) };
     for (let i = 0; i < 14; i++) emit(V(bx, .6, 0), V((rr() - .5) * 6, rr() * 5, (rr() - .5) * 6 + sp), .7, .25, 0xffc46a);
     setTimeout(() => { if (mode === 'dead'){ $('over').hidden = false; countUp($('od'), Math.floor(dist), ' м'); countUp($('oh'), hearts, '', '♥ '); } }, 1300);
@@ -322,8 +376,8 @@
   function tone(f1, f2, d, v, ty){ if (!AC || S.snd === 0) return; const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain(); o.type = ty || 'sine'; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + d); g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d); }
   function boost(){ if (mode === 'play' && !nOn && nitro >= .3){ nOn = 1; vib(30); tone(200, 800, .4, .06, 'sawtooth'); } }
   function nearMiss(){
-    combo++; comboT = 3; nitro = Math.min(1, nitro + .12); vib(15); tone(520, 1040, .15, .05, 'triangle'); let t = ['ЛОВКО!', 'ОГОНЬ!', 'ВАУ!'][combo % 3] + ' x' + combo;
-    if (combo % 3 === 0){ hearts += 2; $('hhr').textContent = '♥ ' + hearts; t += ' +2♥'; chk(); }
+    combo++; comboT = 3; nitro = Math.min(1, nitro + .12 * (1 + .4 * UPL('nit'))); vib(15); tone(520, 1040, .15, .05, 'triangle'); let t = ['ЛОВКО!', 'ОГОНЬ!', 'ВАУ!'][combo % 3] + ' x' + combo;
+    if (combo % 3 === 0){ hearts += 2; P.w += 2; $('hhr').textContent = '♥ ' + hearts; t += ' +2♥'; chk(); }
     cmE.textContent = t; cmE.style.animation = 'none'; void cmE.offsetWidth; cmE.style.animation = 'cmp 1s ease-out forwards';
   }
   function addMag(x0, z0){
@@ -332,7 +386,48 @@
   }
   $('nt').addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); boost(); });
   addEventListener('keydown', e => { if (e.code === 'ShiftLeft' || e.code === 'KeyN') boost(); });
-  $('bSn').textContent = S.snd === 0 ? '🔇' : '🔊'; $('bSn').onclick = () => { S.snd = S.snd === 0 ? 1 : 0; LS.set('fb', S); $('bSn').textContent = S.snd === 0 ? '🔇' : '🔊'; };
+  $('bSn').innerHTML = (S.snd === 0 ? '🔇' : '🔊') + '<small>Звук</small>'; $('bSn').onclick = () => { S.snd = S.snd === 0 ? 1 : 0; LS.set('fb', S); $('bSn').innerHTML = (S.snd === 0 ? '🔇' : '🔊') + '<small>Звук</small>'; };
+  // ---------- shop ----------
+  let shield = 0;
+  const UPS = [['nit', 'Нитро', 'заряжается быстрее'], ['mag', 'Магнит', 'держится дольше'], ['shd', 'Щит', 'спасает от столкновения, по одному за уровень'], ['lgt', 'Фара', 'светит дальше (вечером и ночью)']], COST = [30, 80, 160],
+    glT = tex(64, 64, q => { const g = q.createRadialGradient(32, 32, 2, 32, 32, 30); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(1, 'rgba(255,255,255,0)'); q.fillStyle = g; q.fillRect(0, 0, 64, 64); });
+  function UPL(k){ return (P.up && P.up[k]) || 0; }
+  function flameCol(){ return P.own.flame ? S.flame : 0xff8a3c; }
+  function applyCos(){
+    if (bike.glow){ bike.root.remove(bike.glow); bike.glow = null; }
+    if (P.own.glow){ const g = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 4), new THREE.MeshBasicMaterial({ map: glT, color: S.glow || '#5fd4ff', transparent: true, opacity: .8, blending: THREE.AdditiveBlending, depthWrite: false })); g.rotation.x = -Math.PI / 2; g.position.y = .05; bike.root.add(g); bike.glow = g; }
+  }
+  function cosUI(){
+    const sw = (id, list, key, own) => { const e = $(id), lb = $(id + 'l'); e.hidden = lb.hidden = !own; e.innerHTML = ''; if (!own) return; list.forEach(v => { const b = document.createElement('button'); b.className = 'sw' + (S[key] === v ? ' on' : ''); b.style.background = v; b.setAttribute('aria-label', v); b.onclick = () => { S[key] = v; LS.set('fb', S); applyCos(); cosUI(); }; e.appendChild(b); }); };
+    sw('glc', ['#5fd4ff', '#ff5fae', '#3ddc97', '#ffb454'], 'glow', P.own.glow); sw('flc', ['#ff5fae', '#4aa3ff', '#3ddc97', '#ffd23a'], 'flame', P.own.flame);
+  }
+  function shopUI(){
+    const e = $('us'); e.innerHTML = ''; $('wl').textContent = '♥ ' + P.w;
+    const item = (t, sub, price, buy) => {
+      const d = document.createElement('div'); d.className = 'mi'; d.innerHTML = '<b>' + t + '</b><br><span class="sub">' + sub + '</span>';
+      const b = document.createElement('button'); b.className = 'ch'; b.style.marginTop = '6px'; b.textContent = price === null ? 'Куплено' : price + ' ♥'; b.disabled = price === null || P.w < price;
+      b.onclick = () => { if (price === null || P.w < price) return; P.w -= price; buy(); LS.set('fbp', P); LS.set('fb', S); applyWx(); applyCos(); cosUI(); shopUI(); tone(500, 1000, .2, .06, 'triangle'); vib(15); };
+      d.appendChild(b); e.appendChild(d);
+    };
+    UPS.forEach(([k, n, d]) => { const l = UPL(k); item(n + ' ' + '●'.repeat(l) + '○'.repeat(3 - l), d, l >= 3 ? null : COST[l], () => { P.up[k] = l + 1; }); });
+    item('Неоновая подсветка', 'светится под байком, цвет выбирается в гараже', P.own.glow ? null : 120, () => { P.own.glow = 1; S.glow = '#5fd4ff'; });
+    item('Цветное пламя нитро', 'розовое, голубое, зелёное или жёлтое, выбирается в гараже', P.own.flame ? null : 120, () => { P.own.flame = 1; S.flame = '#ff5fae'; });
+  }
+  function expCode(){ const c = btoa(unescape(encodeURIComponent(JSON.stringify({ S, P })))); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(c).then(() => say('Код скопирован. Сохрани его в заметки', 3200), () => prompt('Скопируй код', c)); else prompt('Скопируй код', c); }
+  function impCode(){ const c = prompt('Вставь код сохранения'); if (!c) return; try { const d = JSON.parse(decodeURIComponent(escape(atob(c.trim())))); if (!d || typeof d.P !== 'object') throw 0; LS.set('fbp', Object.assign({}, P, d.P)); LS.set('fb', Object.assign({}, S, d.S || {})); location.reload(); } catch (e) { say('Код не подошёл', 2400); } }
+  $('bShop').onclick = () => { shopUI(); tab('shp'); }; $('bBack3').onclick = () => tab('home'); $('bExp').onclick = expCode; $('bImp').onclick = impCode;
+  // ---------- wheelie ----------
+  let wOn = 0, wk = 0, wE = 1, wT = 0;
+  ['bk1', 'bk2', 'bk3'].forEach(i => $(i).onclick = () => tab('home'));
+  function wrel(){
+    if (wT >= 2){ const n = Math.floor(wT / 2); hearts += n; P.w += n; $('hhr').textContent = '♥ ' + hearts; cmE.textContent = 'ВИЛИ! +' + n + '♥'; cmE.style.animation = 'none'; void cmE.offsetWidth; cmE.style.animation = 'cmp 1s ease-out forwards'; chk(); }
+    wT = 0;
+  }
+  const wb = $('wh');
+  wb.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); if (mode === 'play' && !air && wE > .15) wOn = 1; });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => wb.addEventListener(t, () => { wOn = 0; })); wb.addEventListener('contextmenu', e => e.preventDefault());
+  addEventListener('keydown', e => { if ((e.code === 'KeyS' || e.code === 'ArrowDown') && mode === 'play' && !air && wE > .15) wOn = 1; });
+  addEventListener('keyup', e => { if (e.code === 'KeyS' || e.code === 'ArrowDown') wOn = 0; });
   // ---------- bear ----------
   let bearE = null, bearDone = 0; const BM = 500;
   function tex(w, h, fn){ const c = document.createElement('canvas'); c.width = w; c.height = h; fn(c.getContext('2d')); return new THREE.CanvasTexture(c); }
@@ -382,25 +477,29 @@
     if (mode === 'play'){
       if (nOn){ nitro -= dt * .55; if (nitro <= 0){ nitro = 0; nOn = 0; } } nk += ((nOn ? 1 : 0) - nk) * Math.min(1, dt * 5);
       comboT -= dt; if (comboT <= 0) combo = 0; if (magT > 0) magT -= dt;
-      speed = Math.min(30, 15 + dist / 70) + nk * 8; dist += speed * dt;
-      if (nk > .3 && rr() < .8) emit(V(bx, .5, .9), V((rr() - .5) * .8, .3, speed * .9 + 4), .35, .3, 0xff8a3c);
-      bx += (lx[lane] - bx) * Math.min(1, dt * (rain ? 6 : 11));
-      if (jumpReq && !air){ vy = 9.2; air = true; for (let i = 0; i < 5; i++) emit(V(bx, .1, .6), V((rr() - .5) * 2, 1, sp * .8), .5, .3, 0xb9b1a6); } jumpReq = false;
+      if (wOn && wE <= .03) wOn = 0;
+      const ww = wOn && !air && wE > .03;
+      if (ww){ wE -= dt * .25; wT += dt; nitro = Math.min(1, nitro + dt * .06 * (1 + .4 * UPL('nit'))); if (rr() < .5) emit(V(bx, .12, .75), V((rr() - .5) * 2, 1.2, sp * .8), .35, .14, 0xffd27a); } else { wE = Math.min(1, wE + dt * .3); if (wT > 0) wrel(); }
+      wk += ((ww ? 1 : 0) - wk) * Math.min(1, dt * 6);
+      speed = Math.min(30, 15 + dist / 70) + nk * 8 + wk * 5; dist += speed * dt;
+      if (nk > .3 && rr() < .8) emit(V(bx, .5, .9), V((rr() - .5) * .8, .3, speed * .9 + 4), .35, .3, flameCol());
+      bx += (lx[lane] - bx) * Math.min(1, dt * (rain ? 6 : 11) * (1 - .4 * wk));
+      if (jumpReq && !air && wk < .4){ vy = 9.2; air = true; for (let i = 0; i < 5; i++) emit(V(bx, .1, .6), V((rr() - .5) * 2, 1, sp * .8), .5, .3, 0xb9b1a6); } jumpReq = false;
       if (air){ vy -= 26 * dt; py += vy * dt; if (py <= 0){ py = 0; air = false; landed = true; vib(8); shake = Math.max(shake, .14); for (let i = 0; i < 8; i++) emit(V(bx, .1, .4), V((rr() - .5) * 4, rr() * 2, sp * .8), .6, .35, 0xb9b1a6); } }
       obs.forEach(o => o.z += speed * dt); hl.forEach(a => { a.z += speed * dt; a.m.rotation.y += dt * 3; a.m.position.set(a.x, a.y + Math.sin(tm * 4 + a.z) * .08, a.z); });
       obs.forEach(o => o.g.position.z = o.z);
       for (const o of obs) if (!o.nm && o.z > .9){ o.nm = 1; if (Math.abs(o.x - bx) < o.w / 2 + 1.1) nearMiss(); }
       if (magT > 0) hl.forEach(a => { if (a.on && a.z > -16 && a.z < 3 && Math.abs(a.x - bx) < 5){ const k = Math.min(1, dt * 7); a.x += (bx - a.x) * k; a.y += (py + .95 - a.y) * k; } });
       pk = pk.filter(p => { p.z += speed * dt; p.g.rotation.y += dt * 3; p.g.position.set(p.x, 1.1 + Math.sin(tm * 4) * .1, p.z);
-        if (Math.abs(p.z) < 1 && Math.abs(p.x - bx) < 1.2 && Math.abs(1.1 - (py + .95)) < 1.1){ magT = 7; vib(20); tone(400, 900, .25, .06, 'square'); say('🧲 Магнит! Сердечки сами летят к тебе', 2200); scene.remove(p.g); return false; }
+        if (Math.abs(p.z) < 1 && Math.abs(p.x - bx) < 1.2 && Math.abs(1.1 - (py + .95)) < 1.1){ magT = 7 + 3 * UPL('mag'); vib(20); tone(400, 900, .25, .06, 'square'); say('🧲 Магнит! Сердечки сами летят к тебе', 2200); scene.remove(p.g); return false; }
         if (p.z > 8){ scene.remove(p.g); return false; } return true; });
-      for (const o of obs) if (o.z > -.9 && o.z < .9 && Math.abs(o.x - bx) < o.w / 2 + .4 && py < o.h - .1){ crash(); break; }
-      if (mode === 'play') hl.forEach(a => { if (a.on && Math.abs(a.z) < .9 && Math.abs(a.x - bx) < 1.1 && Math.abs(a.y - (py + .95)) < 1){ a.on = 0; scene.remove(a.m); hearts++; vib(8); tone(880, 1320, .12, .04); nitro = Math.min(1, nitro + .03); $('hhr').classList.remove('pop'); void $('hhr').offsetWidth; $('hhr').classList.add('pop'); for (let i = 0; i < 8; i++) emit(V(a.x, a.y, a.z), V((rr() - .5) * 5, rr() * 4, (rr() - .5) * 5 + sp), .6, .22, 0xff5fae); chk(); } });
+      for (const o of obs) if (o.z > -.9 && o.z < .9 && Math.abs(o.x - bx) < o.w / 2 + .4 && py < o.h - .1){ if (shield > 0){ shield--; o.z = 99; o.nm = 1; vib(40); flash('#5fd4ff'); tone(300, 90, .3, .08, 'square'); say('🛡️ Щит спас! Осталось: ' + shield, 1800); } else { crash(); break; } }
+      if (mode === 'play') hl.forEach(a => { if (a.on && Math.abs(a.z) < .9 && Math.abs(a.x - bx) < 1.1 && Math.abs(a.y - (py + .95)) < 1){ a.on = 0; scene.remove(a.m); hearts++; P.w++; vib(8); tone(880, 1320, .12, .04); nitro = Math.min(1, nitro + .03 * (1 + .4 * UPL('nit'))); $('hhr').classList.remove('pop'); void $('hhr').offsetWidth; $('hhr').classList.add('pop'); for (let i = 0; i < 8; i++) emit(V(a.x, a.y, a.z), V((rr() - .5) * 5, rr() * 4, (rr() - .5) * 5 + sp), .6, .22, 0xff5fae); chk(); } });
       obs = obs.filter(o => o.z < 8 || (scene.remove(o.g), false)); hl = hl.filter(a => a.on && (a.z < 8 || (scene.remove(a.m), false)));
       if (dist >= nextSp) spawnRow(); if (S.map === 'forest' && !bearDone && dist >= BM - 150) spawnBear();
       if (S.map === 'tour'){ const nm = TOUR[Math.floor(dist / 500) % TOUR.length]; if (nm !== CM){ CM = nm; setTimeout(() => { if (S.map === 'tour' && mode === 'play'){ setGround(nm); snow.visible = nm === 'winter'; say(TN[nm]); } }, 9000); } }
-      if (dist >= 120 && !eg.a){ eg.a = 1; say('Права сдашь на отлично 🪪'); } if (S.map === 'kazan' && dist >= 400 && !eg.b){ eg.b = 1; say('Cool Cool'); }
-      hudT -= dt; if (hudT <= 0){ hudT = .1; $('hdist').textContent = Math.floor(dist) + ' м'; $('nt').style.setProperty('--p', Math.round(nitro * 100) + '%'); $('nt').classList.toggle('rdy', nitro >= .3 || nOn === 1); $('hhr').textContent = '♥ ' + hearts + (magT > 0 ? ' 🧲' : ''); if (Math.floor(dist / 50) !== ov){ ov = Math.floor(dist / 50); chk(); } }
+      if (dist >= 120 && !eg.a){ eg.a = 1; say('Права сдашь на отлично'); } if (S.map === 'kazan' && dist >= 400 && !eg.b){ eg.b = 1; say('Cool Cool 😄'); }
+      hudT -= dt; if (hudT <= 0){ hudT = .1; $('hdist').textContent = Math.floor(dist) + ' м'; $('nt').style.setProperty('--p', Math.round(nitro * 100) + '%'); $('nt').classList.toggle('rdy', nitro >= .3 || nOn === 1); wb.style.setProperty('--p', Math.round(wE * 100) + '%'); wb.classList.toggle('on', wk > .5); $('hhr').textContent = '♥ ' + hearts + (magT > 0 ? ' 🧲' : '') + (shield ? ' 🛡️' + shield : ''); if (Math.floor(dist / 50) !== ov){ ov = Math.floor(dist / 50); chk(); } }
     }
     animBike(dt, landed); animBear(dt);
     updP(dt);
@@ -430,9 +529,9 @@
     }
     const tl = mode === 'play' ? -(lx[lane] - bx) * .16 : 0; leanK *= Math.pow(.05, dt);
     B.lean.rotation.z += (Math.max(-.4, Math.min(.4, tl)) - B.lean.rotation.z) * Math.min(1, dt * 10);
-    const wh = wt > 0 ? -.6 * Math.sin(Math.min(1, wt / 1.2) * Math.PI) : 0, tp = (mode === 'play' ? Math.max(-.35, Math.min(.35, -vy * .035)) : 0) + wh;
+    const wh = (wt > 0 ? .6 * Math.sin(Math.min(1, wt / 1.2) * Math.PI) : 0) + .65 * wk, tp = (mode === 'play' ? Math.max(-.35, Math.min(.35, vy * .035)) : 0) + wh;
     B.pitch.rotation.x += (tp - B.pitch.rotation.x) * Math.min(1, dt * 12);
-    const vib = Math.sin(tm * (mode === 'play' ? 38 : 24)) * (mode === 'play' && !air ? .012 : .006); r.position.set(mode === 'menu' ? 0 : bx, py - wh * .35, 0); B.pitch.position.y = vib;
+    const vib = Math.sin(tm * (mode === 'play' ? 38 : 24)) * (mode === 'play' && !air ? .012 : .006); const th = Math.max(0, B.pitch.rotation.x); r.position.set(mode === 'menu' ? 0 : bx, py, 0); B.pitch.position.y = vib + .75 * Math.sin(th); B.pitch.position.z = .75 - .75 * Math.cos(th);
     B.bs.scale.set(.6 / (1 + py * .25), 1.3 / (1 + py * .25), 1); B.bs.material.opacity = .35 / (1 + py * .6);
     const urch = mode === 'play' ? -.1 - (speed - 15) * .008 + (air ? vy * .01 : 0) : -.05; B.up.rotation.x += (urch - B.up.rotation.x) * Math.min(1, dt * 8); B.up.rotation.z = -B.lean.rotation.z * .5; B.head.rotation.x = -urch * .6 + Math.sin(tm * 3) * .02;
     const w = mode === 'play' ? speed / 20 : .15; B.pony.forEach((g, i) => { g.rotation.x = -(.55 + i * .28 + Math.sin(tm * 9 - i * .9) * .16 * w) * (.5 + w * .6); g.rotation.z = Math.sin(tm * 7 - i) * .1 * w + B.lean.rotation.z * .4; });
@@ -445,17 +544,17 @@
     sndUpd(); R.render(scene, cam); requestAnimationFrame(frame); }
 
   // ---------- menu UI ----------
-  const MAPS = [['kazan','Казань'],['forest','Лес'],['river','Набережная'],['mountain','Серпантин'],['winter','Зима'],['neon','Неон'],['tour','Микс']], WX = [['day','День'],['night','Ночь'],['dusk','Закат'],['rain','Дождь']];
+  const MAPS = [['kazan','🕌 Казань'],['forest','🌲 Лес'],['river','🌊 Набережная'],['mountain','⛰️ Серпантин'],['winter','❄️ Зима'],['neon','🌃 Неон'],['tour','🎲 Микс']], WX = [['day','☀️ День'],['night','🌙 Ночь'],['dusk','🌇 Закат'],['rain','🌧️ Дождь']];
   function pick(k, v){ if (k === 'map' && v === 'neon' && S.wx === 'day') S.wx = 'night'; S[k] = v; LS.set('fb', S); if (k === 'bike') swap(); if (k === 'map') buildWorld(); if (k === 'wx') applyWx(); applyCol(); ui(); }
   function chips(id, list, key){ const e = $(id); e.innerHTML = ''; list.forEach(([v, l, dis]) => { const b = document.createElement('button'); b.className = 'ch' + (S[key] === v ? ' on' : ''); b.textContent = l; b.disabled = !!dis; b.onclick = () => pick(key, v); e.appendChild(b); }); }
   function sws(id, list, key){ const e = $(id); e.innerHTML = ''; list.forEach(v => { const b = document.createElement('button'); b.className = (v ? 'sw' : 'ch') + (S[key] === v ? ' on' : ''); if (v) b.style.background = v; else b.textContent = 'без'; b.setAttribute('aria-label', v || 'без'); b.onclick = () => pick(key, v); e.appendChild(b); }); }
-  function ui(){
+  function ui(){ cosUI(); $('st').textContent = '♥ ' + P.w + '  ·  рекорд ' + P.best + ' м';
     chips('mp', MAPS, 'map'); chips('wx', WX, 'wx'); chips('bk', [['darex','Darex 250'], ['bmw', unl() ? 'BMW S1000RR' : 'BMW S1000RR 🔒', !unl()]], 'bike');
     sws('cb', ['#2f6bff','#f6f8ff','#ff5fae','#3ddc97','#ffb454'], 'body'); sws('ch', ['#111118','#f6f8ff','#ff5fae','#2f6bff'], 'helmet'); sws('hn', ['','#ff5fae','#6fa8ff','#ffb454'], 'horns'); sws('hx', ['#15151b','#f6f8ff','#ff5fae','#6f7a8c'], 'hoodie');
     const m = [['Казань: проехать 1000 м', P.kd, 1000], ['Собрать 30 ♥ за один заезд', P.hr, 30], ['Проехать 600 м под дождём', P.rd, 600]];
     $('ms').innerHTML = m.map(a => '<div class="mi">' + a[0] + ' <b>' + Math.min(a[1], a[2]) + ' / ' + a[2] + '</b><div class="bar"><i style="width:' + Math.min(100, a[1] / a[2] * 100) + '%"></i></div></div>').join('') + '<p class="sub">' + (unl() ? 'BMW S1000RR открыт, он уже в гараже 🏁' : 'Выполни все три, и в гараже появится BMW S1000RR') + '</p>';
   }
-  function tab(t){ ['home','gar','mis'].forEach(i => $(i).hidden = i !== t); }
+  function tab(t){ ['home','gar','mis','shp'].forEach(i => $(i).hidden = i !== t); }
   $('bGar').onclick = () => tab('gar'); $('bMis').onclick = () => tab('mis'); $('bBack1').onclick = $('bBack2').onclick = () => tab('home');
   function pause(){ if (mode !== 'play' || paused) return; paused = true; $('pz').hidden = false; }
   function resume(){ if (!paused) return; paused = false; $('pz').hidden = true; last = performance.now(); }
